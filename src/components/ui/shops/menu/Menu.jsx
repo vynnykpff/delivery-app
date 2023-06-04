@@ -4,7 +4,7 @@ import {useEffect, useMemo} from "react";
 import {requestMenu} from "../../../../store/menu/menu.slice.js";
 import {v4 as uuidv4} from 'uuid';
 import {Option, Select} from "../../select/Select.styled.jsx";
-import {setSelectValue} from "../../../../store/select/select.slice.js";
+import {resetSelectValue, setSelectValue} from "../../../../store/select/select.slice.js";
 import Card from "../card/Card.jsx";
 import ShopsList from "../shopsList/ShopsList.jsx";
 
@@ -41,8 +41,8 @@ const Menu = ({shops}) => {
 				</Select>
 			}
 			<CardsBlock>
-				{status &&
-					getCards().map(card => <Card key={card.id} image={card.image} name={card.name}/>)
+				{(selectValue !== "" && status) &&
+					getCards().map(card => <Card key={card.id} image={card.image} name={card.name} price={card.price}/>)
 				}
 			</CardsBlock>
 

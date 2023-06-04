@@ -1,6 +1,7 @@
 import logo from '../../../../assets/images/logo.png';
 import {Container} from "../../layout/Layout.styled.jsx";
 import {
+	CountBuys,
 	LogoImage,
 	MobileNav,
 	Nav,
@@ -22,6 +23,8 @@ import {IoIosClose, IoIosMenu} from "react-icons/io";
 const Navbar = () => {
 	const [nav, setNav] = useState(false);
 	const theme = useSelector(state => state.theme);
+	const {count} = useSelector(state => state.count);
+
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -45,7 +48,10 @@ const Navbar = () => {
 						<NavItem to="/coupons"><NavItemAnchor>Coupons</NavItemAnchor></NavItem>
 					</NavList>
 					<NavAdditionalList>
-						<NavItem to={shoppingCart}><HiOutlineShoppingCart/></NavItem>
+						<NavItem className="shoppingCart" to={shoppingCart}>
+							<CountBuys>{count}</CountBuys>
+							<HiOutlineShoppingCart/>
+						</NavItem>
 						<NavItem to="/contacts"><BiPhoneCall/></NavItem>
 						<NavItemTheme onClick={() => {
 							handleChange()

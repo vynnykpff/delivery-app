@@ -1,14 +1,24 @@
-import {CardButton, CardContent, CardImage, CardTitle, CardWrapper} from "./Card.styled.jsx";
+import {CardButton, CardContent, CardImage, CardPrice, CardTitle, CardWrapper} from "./Card.styled.jsx";
 import {TbShoppingCartPlus} from "react-icons/tb";
+import NumberFormat from "../../../../utils/number-format.js";
+import {useDispatch} from "react-redux";
+import {setCount} from "../../../../store/count-buys/countBuys.slice.js";
 
-const Card = ({image, name}) => {
+
+const Card = ({image, name, price}) => {
+	const dispatch = useDispatch();
+	const handleBuysCount = () => {
+		dispatch(setCount());
+	}
+
 	return (
 		<CardWrapper>
+			<CardImage src={image}/>
 			<CardContent>
-				<CardImage src={image}/>
 				<CardTitle>{name}</CardTitle>
-				<CardButton><TbShoppingCartPlus/></CardButton>
+				<CardPrice>{NumberFormat('ru-RU', {style: 'currency', currency: 'UAH'}, price)}</CardPrice>
 			</CardContent>
+			<CardButton onClick={handleBuysCount}><TbShoppingCartPlus/></CardButton>
 		</CardWrapper>
 	);
 };

@@ -5,9 +5,9 @@ import {tablet} from "../../../../shared/constants/mediaQueries.js";
 
 const Nav = styled.nav`
   display: flex;
-	justify-content: space-between;
-	align-items: center;
-	height: 100px;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
 
   //@media (max-width: 768px) {
   //  display: flex;
@@ -32,11 +32,11 @@ const Nav = styled.nav`
 `
 
 const MobileNav = styled.div`
-	display: block;
-	z-index: 10;
-	@media (min-width: ${tablet}) {
-		display: none;
-	}
+  display: block;
+  z-index: 10;
+  @media (min-width: ${tablet}) {
+    display: none;
+  }
 `;
 
 const LogoImage = styled.img`
@@ -45,28 +45,49 @@ const LogoImage = styled.img`
 
 const NavList = styled.div`
   display: flex;
-	align-items: center;
-	column-gap: 60px;
+  align-items: center;
+  column-gap: 60px;
 `;
 
 const NavAdditionalList = styled.div`
   display: flex;
-	column-gap: 25px;
+  column-gap: 25px;
 `;
 
 const NavItem = styled(NavLink)`
   display: flex;
   color: var(--link-color);
   text-decoration: none;
-	font-size: ${fontSizeLink};
+  font-size: ${fontSizeLink};
   transition: color 0.3s ease;
-	
-	&.active {
-		text-decoration: none;
+
+  &.active {
+    text-decoration: none;
     transition: color 0.3s ease;
-		color: var(--accent-color);
+    color: var(--accent-color);
+  }
+	
+	&.shoppingCart {
+		position: relative;
 	}
 `;
+
+const CountBuys = styled.span`
+  display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	width: 15px;
+	height: 15px;
+	background-color: #fff;
+	right: -5px;
+	top: -5px;
+	border-radius: 50%;
+	font-size: 14px;
+	color: #000;
+	font-weight: 700;
+`;
+
 
 const NavItemAnchor = styled.span`
   position: relative;
@@ -93,9 +114,9 @@ const NavItemAnchor = styled.span`
 
 const NavItemTheme = styled.span`
   color: #fff;
-	font-size: ${fontSizeLink};
-	cursor: pointer;
+  font-size: ${fontSizeLink};
+  cursor: pointer;
 `;
 
 
-export {Nav, MobileNav, LogoImage, NavList, NavAdditionalList, NavItemAnchor, NavItem, NavItemTheme};
+export {Nav, MobileNav, LogoImage, NavList, NavAdditionalList, NavItemAnchor, NavItem, CountBuys, NavItemTheme};

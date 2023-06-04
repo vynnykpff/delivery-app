@@ -16,14 +16,13 @@ import {createSlice} from "@reduxjs/toolkit";
 // 		} catch (error) {
 // 			return rejectWithValue(error.message);
 // 		}
-//
 // 	}
 // )
 
 const selectSlice = createSlice({
 	name: 'select',
 	initialState: {
-		selectValue: "burgers",
+		selectValue: "",
 		status: null,
 		error: null,
 	},
@@ -31,11 +30,15 @@ const selectSlice = createSlice({
 		setSelectValue: (state, action) => {
 				state.selectValue = action.payload;
 				state.status = true;
+		},
+		resetSelectValue: (state) => {
+			state.selectValue = "";
+			state.status = true;
 		}
 	}
 })
 
-export const {setSelectValue} = selectSlice.actions
+export const {setSelectValue, resetSelectValue} = selectSlice.actions
 
 export default selectSlice.reducer;
 
