@@ -3,6 +3,11 @@ export const ROUTES = {
 	home: '/',
 	shop: 'shop',
 	shoppingCart: 'shopping-cart',
+	mcdonalds: 'shop/mcdonalds',
+	burgerKing: 'shop/burgerKing',
+	kfc: 'shop/kfc',
+	starbucks: 'shop/starbucks',
+	subway: 'shop/subway',
 	all: '*',
 };
 
@@ -11,5 +16,6 @@ export const {
 	home,
 	shop,
 	shoppingCart,
+	burgerKing, kfc, mcdonalds, starbucks, subway,
 	all,
 } = ROUTES;

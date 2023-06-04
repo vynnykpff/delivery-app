@@ -1,6 +1,15 @@
+import {ShopWrapper} from "./Shop.styled.jsx";
+import ShopsList from "../../ui/shops/shopsList/ShopsList.jsx";
+import {Title} from "../../ui/common/Common.Styled.jsx";
+
 const Shop = () => {
 	return (
-		<h2>Shop page</h2>
+		<>
+			<ShopWrapper>
+				<Title>Select Shop</Title>
+				<ShopsList/>
+			</ShopWrapper>
+		</>
 	);
 };
 
