@@ -1,0 +1,1 @@
+import{j as r}from"./index-5b1c1f87.js";import{W as s}from"./Common.Styled-4383e656.js";import{M as e}from"./Menu-5552ead1.js";import"./v4-2b919df4.js";const p=()=>r.jsxs(s,{children:[r.jsx("h2",{children:"Burger King"}),r.jsx(e,{shops:"burgerKing"})]});export{p as default};
