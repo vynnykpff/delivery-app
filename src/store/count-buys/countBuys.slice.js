@@ -4,13 +4,14 @@ const countBuysSlice = createSlice({
 	name: 'count',
 	initialState: {
 		count: 0,
-		status: null,
-		error: null,
 	},
 	reducers: {
-		setCount: (state) => {
-			state.count += 1;
-			state.status = true;
+		setCount: (state, action) => {
+			if (action.payload === 'plus') {
+				state.count += 1;
+			} else {
+				state.count -= 1;
+			}
 		},
 	}
 })
@@ -18,5 +19,3 @@ const countBuysSlice = createSlice({
 export const {setCount} = countBuysSlice.actions
 
 export default countBuysSlice.reducer;
-
-

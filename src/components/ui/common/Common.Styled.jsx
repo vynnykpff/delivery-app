@@ -11,8 +11,6 @@ const Title = styled.h3`
 `;
 
 const Wrapper = styled.div`
-  display: flex;
-	justify-content: center;
 	margin: 40px 0;
 	color: #fff;
 `;
