@@ -8,12 +8,12 @@ const ShopsMenu = styled.div`
 `;
 
 const CardsBlock = styled.div`
-  margin-top: 40px;
   display: flex;
   flex-wrap: wrap;
+	width: calc(100% + 30px);
+	margin: -15px;
+	margin-top: 25px;
   justify-content: center;
-  align-items: center;
-  gap: 30px
 `;
 
 export {ShopsMenu, CardsBlock};

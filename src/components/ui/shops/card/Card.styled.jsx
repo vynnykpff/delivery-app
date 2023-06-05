@@ -3,7 +3,8 @@ import {baseBoxShadow, baseTransition} from "../../../../shared/constants/variab
 import {Link} from "react-router-dom";
 
 const CardWrapper = styled.div`
-	width: 300px;
+	width: calc(100% / 4 - 30px);
+	margin: 15px;
 	background-color: #444;
 	border-radius: 30px;
 	position: relative;
@@ -12,31 +13,30 @@ const CardWrapper = styled.div`
 
 const CardContent = styled.div`
 	text-align: center;
+  display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 20px;
 `;
 
 const CardImage = styled.img`
 	width: 100%;
-	height: 180px;
 	border-top-left-radius: 30px;	
 	border-top-right-radius: 30px;
+	margin: 0;
+	object-fit: contain;
 `;
 
 const CardTitle = styled.p`
-	//width: 50%;
-	//margin: 0 auto;
-	//text-align: center;
-	//padding: 20px 0;
-	//font-size: 25px;
-	//font-weight: 600;
-  //display: flex;
-	//justify-content: center;
-	//align-items: center;
 	font-size: 22px;
 	letter-spacing: 1.5px;
+	margin: 0;
+	margin-bottom: 10px;
 `;
 
 const CardPrice = styled.p`
 	font-size: 18px;
+	margin: 0;
 `;
 
 const CardButton = styled(Link)`

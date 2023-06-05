@@ -80,12 +80,13 @@ const CountBuys = styled.span`
 	width: 15px;
 	height: 15px;
 	background-color: #fff;
-	right: -5px;
-	top: -5px;
+	right: -8px;
+	top: -8px;
 	border-radius: 50%;
 	font-size: 14px;
 	color: #000;
 	font-weight: 700;
+	padding: 2px;
 `;
 
 
