@@ -1,4 +1,4 @@
-import{n as e,j as t}from"./index-5b1c1f87.js";import{T as r,S as s}from"./Common.Styled-4383e656.js";const n=e.main`
+import{n as e,j as t}from"./index-6ef845c6.js";import{T as r,S as s}from"./Common.Styled-93a409cf.js";const n=e.main`
 	margin: 40px auto;
 	text-align: center;
 	max-width: 50%;
