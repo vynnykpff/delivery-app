@@ -31,7 +31,7 @@ const CartItem = ({image, name, price, count, id}) => {
 				src={image}/>
 			<ProductsInfo>
 				<ProductsTitle>{name}</ProductsTitle>
-				<ProductsCount onChange={handleChange} defaultValue={count} type="number" min="0"/>
+				<ProductsCount onChange={handleChange} defaultValue={count} type="number" min="1"/>
 				<CartItemPrice>{NumberFormat('ru-RU', {style: 'currency', currency: 'UAH'}, price * count)}</CartItemPrice>
 				<CartDeleteButton onClick={() => handleClick(id)}>
 					<CgCloseO/>
