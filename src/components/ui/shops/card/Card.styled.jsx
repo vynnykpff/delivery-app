@@ -54,6 +54,16 @@ const CardButton = styled(Link)`
 	text-decoration: none;
 	color: #000;
 	
+	&.addProductToCart {
+		background-color: #bbe903;
+		
+		&:hover {
+			background-color: var(--accent-color);
+			color: #000;
+		}
+	}
+	
+	
 	
 	&:hover {
 		color: #fff;
