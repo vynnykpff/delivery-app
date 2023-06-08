@@ -1,21 +1,21 @@
-import {CloseButton, ModalContent, ModalOverlay} from "./ModalWindow.styled.jsx";
-import {useState} from "react";
+import {ModalContent, ModalOverlay} from "./ModalWindow.styled.jsx";
 
-const ModalWindow = ({isOpen, onClose, children}) => {
-	const [modalOpen, setModalOpen] = useState(isOpen);
-
-	const closeModal = () => {
-		setModalOpen(false);
-		onClose();
-	};
-
-	if (!modalOpen) {
-		return null;
-	}
+const ModalWindow = ({ active, setActive, children }) => {
 	return (
-		<ModalOverlay>
-			<ModalContent>
-				<CloseButton onClick={closeModal}>&times;</CloseButton>
+		<ModalOverlay
+			className={
+				active ? 'modal active' : 'modal'
+			}
+			onClick={() => setActive(false)}
+		>
+			<ModalContent
+				className={
+					active
+						? `modal__content active`
+						: `modal__content`
+				}
+				onClick={e => e.stopPropagation()}
+			>
 				{children}
 			</ModalContent>
 		</ModalOverlay>

@@ -4,7 +4,7 @@ import { baseBoxShadow, baseFontFamily } from "../../../../shared/constants/vari
 import InputMask from "react-input-mask";
 
 const FormBlock = styled(Form)`
-  min-width: 300px;
+  width: 350px;
   font-family: ${baseFontFamily};
 `;
 

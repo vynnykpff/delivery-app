@@ -5,6 +5,15 @@ import {Controller, useForm} from "react-hook-form";
 import {Select} from "antd";
 import {useEffect, useState} from "react";
 import {requestAddress, requestDescriptionWay, requestGetWay, setWay} from "../../../../store/address/address.slice.js";
+import ModalWindow from "../../../ui/modal-window/ModalWindow.jsx";
+import {
+	CloseButton, DescriptionOfWay,
+	MapImage,
+	MapInfoBlock,
+	OrderTitle,
+	TitleWay
+} from "../../../ui/modal-window/ModalWindow.styled.jsx";
+import {GrFormClose} from "react-icons/gr";
 
 const Form = () => {
 	const {arrayProducts} = useSelector((state) => state.products);
@@ -12,7 +21,7 @@ const Form = () => {
 	const totalCount = arrayProducts.reduce((acc, {price, count}) => acc + price * count, 0);
 	const dispatch = useDispatch();
 	const [whereWay, setWhereWay] = useState('');
-
+	const [modalActive, setModalActive] = useState(false);
 
 	useEffect(() => {
 		dispatch(requestAddress());
@@ -34,14 +43,12 @@ const Form = () => {
 	const onSubmit = () => {
 		dispatch(requestGetWay())
 		dispatch(requestDescriptionWay());
+		setModalActive(true);
 		reset();
 	};
 
-	console.log(descriptionWay);
-
 	return (
 		<>
-			{status && <img src={way} alt=""/>}
 			<FormBlock onFinish={handleSubmit(onSubmit)} layout="vertical" initialValues={{layout: "vertical"}}>
 				<FormItem
 					label="Name"
@@ -139,6 +146,7 @@ const Form = () => {
 						)}
 					/>
 					<Select
+						style={{marginTop: 20}}
 						showSearch
 						placeholder="From"
 						optionFilterProp="children"
@@ -156,6 +164,25 @@ const Form = () => {
 					</SendButton>
 				</OrderBlock>
 			</FormBlock>
+			<ModalWindow active={modalActive} setActive={setModalActive}>
+				{status ?
+					<>
+						<CloseButton onClick={() => setModalActive(false)}><GrFormClose/></CloseButton>
+						<MapInfoBlock>
+							<OrderTitle>The order has been processed</OrderTitle>
+							<TitleWay>Way from <span style={{color: 'var(--accent-color)'}}>{descriptionWay?.route?.locations[1]?.adminArea5}</span> to <span
+								style={{color: 'var(--accent-color)'}}>{descriptionWay?.route?.locations[0]?.adminArea5}</span></TitleWay>
+							<MapImage
+								src={way}/>
+							<DescriptionOfWay>
+								<p>Distance: <span style={{color: 'var(--accent-color)'}}>{Math.round(descriptionWay?.route?.distance * 100) / 100}</span> km</p>
+								<p>Delivery Time: <span style={{color: 'var(--accent-color)'}}>{descriptionWay?.route?.formattedTime}</span></p>
+							</DescriptionOfWay>
+						</MapInfoBlock>
+					</>
+					: <div>Loading</div>
+				}
+			</ModalWindow>
 		</>
 	);
 };
