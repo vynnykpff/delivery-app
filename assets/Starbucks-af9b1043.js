@@ -1,1 +1,0 @@
-import{j as r}from"./index-6ef845c6.js";import{W as s}from"./Common.Styled-93a409cf.js";import{M as t}from"./Menu-d5a98fac.js";import"./v4-2b919df4.js";const m=()=>r.jsxs(s,{children:[r.jsx("h2",{children:"Starbucks"}),r.jsx(t,{shops:"starbucks"})]});export{m as default};

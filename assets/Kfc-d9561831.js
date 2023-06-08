@@ -1,0 +1,1 @@
+import{j as r}from"./index-9849bc89.js";import{W as s}from"./Common.Styled-bf2f75d8.js";import{M as o}from"./Menu-22264369.js";import"./v4-2b919df4.js";const i=()=>r.jsxs(s,{children:[r.jsx("h2",{children:"KFC"}),r.jsx(o,{shops:"kfc"})]});export{i as default};
