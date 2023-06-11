@@ -14,9 +14,17 @@ const statusCardSlice = createSlice({
 				state.statusCards[cardId] = { status };
 			}
 		},
+		toggleCardStatusInShop: (state, action) => {
+			const {cardId, status} = action.payload;
+			if (state.statusCards[cardId]) {
+				state.statusCards[cardId].status = status;
+			} else {
+				state.statusCards[cardId] = {status};
+			}
+		},
 	},
 });
 
-export const { toggleCardStatus } = statusCardSlice.actions;
+export const { toggleCardStatus, toggleCardStatusInShop } = statusCardSlice.actions;
 
 export default statusCardSlice.reducer;

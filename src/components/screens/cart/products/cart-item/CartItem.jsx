@@ -12,6 +12,7 @@ import {useDispatch} from "react-redux";
 import {removeProduct, setProductCount} from "../../../../../store/products/products.slice.js";
 import {CgCloseO} from "react-icons/cg";
 import {setCount} from "../../../../../store/count-buys/countBuys.slice.js";
+import {toggleCardStatusInShop} from "../../../../../store/status-card/statusCard.slice.js";
 
 const CartItem = ({image, name, price, count, id}) => {
 	const dispatch = useDispatch();
@@ -22,7 +23,9 @@ const CartItem = ({image, name, price, count, id}) => {
 
 	const handleClick = (id) => {
 		dispatch(removeProduct(id));
+		dispatch(toggleCardStatusInShop({ cardId: id, status: false }));
 		dispatch(setCount());
+
 	}
 
 	return (

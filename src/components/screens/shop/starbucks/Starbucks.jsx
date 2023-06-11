@@ -4,7 +4,6 @@ import Menu from "../../../ui/shops/menu/Menu.jsx";
 const Starbucks = () => {
 	return (
 		<Wrapper>
-			<h2>Starbucks</h2>
 			<Menu shops="starbucks"/>
 		</Wrapper>
 	);

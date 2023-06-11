@@ -4,16 +4,24 @@ import {useDispatch, useSelector} from "react-redux";
 import {Controller, useForm} from "react-hook-form";
 import {Select} from "antd";
 import {useEffect, useState} from "react";
-import {requestAddress, requestDescriptionWay, requestGetWay, setWay} from "../../../../store/address/address.slice.js";
+import {
+	requestAddress,
+	requestDescriptionWay,
+	requestGetWay,
+	setFormData,
+	setWay
+} from "../../../../store/address/address.slice.js";
 import ModalWindow from "../../../ui/modal-window/ModalWindow.jsx";
 import {
-	CloseButton, DescriptionOfWay,
+	CloseButton,
+	DescriptionOfWay,
 	MapImage,
 	MapInfoBlock,
 	OrderTitle,
 	TitleWay
 } from "../../../ui/modal-window/ModalWindow.styled.jsx";
 import {GrFormClose} from "react-icons/gr";
+import {getDate, getTime} from "../../../../utils/getDate.js";
 
 const Form = () => {
 	const {arrayProducts} = useSelector((state) => state.products);
@@ -22,6 +30,8 @@ const Form = () => {
 	const dispatch = useDispatch();
 	const [whereWay, setWhereWay] = useState('');
 	const [modalActive, setModalActive] = useState(false);
+
+	let totalSum = 0;
 
 	useEffect(() => {
 		dispatch(requestAddress());
@@ -40,8 +50,21 @@ const Form = () => {
 		mode: "onBlur",
 	});
 
-	const onSubmit = () => {
-		dispatch(requestGetWay())
+	const onSubmit = (data) => {
+		const storedProducts = JSON.parse(window.localStorage.getItem('Products'));
+		arrayProducts.map(product => totalSum += product.price * product.count);
+
+
+		if (storedProducts && storedProducts.length > 0) {
+			const newProducts = [...storedProducts];
+			newProducts.push([...arrayProducts, {...data, date: getDate(), time: getTime(), totalPrice: totalSum}]);
+			window.localStorage.setItem('Products', JSON.stringify(newProducts));
+		} else {
+			window.localStorage.setItem('Products', JSON.stringify([arrayProducts.concat({...data, date: getDate(), time: getTime(), totalPrice: totalSum})]));
+		}
+
+		dispatch(setFormData(data));
+		dispatch(requestGetWay());
 		dispatch(requestDescriptionWay());
 		setModalActive(true);
 		reset();
@@ -164,19 +187,24 @@ const Form = () => {
 					</SendButton>
 				</OrderBlock>
 			</FormBlock>
+
 			<ModalWindow active={modalActive} setActive={setModalActive}>
 				{status ?
 					<>
 						<CloseButton onClick={() => setModalActive(false)}><GrFormClose/></CloseButton>
 						<MapInfoBlock>
 							<OrderTitle>The order has been processed</OrderTitle>
-							<TitleWay>Way from <span style={{color: 'var(--accent-color)'}}>{descriptionWay?.route?.locations[1]?.adminArea5}</span> to <span
+							<TitleWay>Way from <span
+								style={{color: 'var(--accent-color)'}}>{descriptionWay?.route?.locations[1]?.adminArea5}</span> to <span
 								style={{color: 'var(--accent-color)'}}>{descriptionWay?.route?.locations[0]?.adminArea5}</span></TitleWay>
 							<MapImage
 								src={way}/>
 							<DescriptionOfWay>
-								<p>Distance: <span style={{color: 'var(--accent-color)'}}>{Math.round(descriptionWay?.route?.distance * 100) / 100}</span> km</p>
-								<p>Delivery Time: <span style={{color: 'var(--accent-color)'}}>{descriptionWay?.route?.formattedTime}</span></p>
+								<p>Distance: <span
+									style={{color: 'var(--accent-color)'}}>{Math.round(descriptionWay?.route?.distance * 100) / 100}</span> km
+								</p>
+								<p>Delivery Time: <span
+									style={{color: 'var(--accent-color)'}}>{descriptionWay?.route?.formattedTime}</span></p>
 							</DescriptionOfWay>
 						</MapInfoBlock>
 					</>
