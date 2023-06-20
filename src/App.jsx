@@ -7,6 +7,8 @@ import Layout from "./components/ui/layout/Layout.jsx";
 import {
 	all,
 	burgerKing,
+	coupons,
+	history,
 	home,
 	kfc,
 	mcdonalds,
@@ -18,6 +20,8 @@ import {
 // Screens with lazy loading
 const ShopPage = lazy(() => import('./components/screens/shop/Shop.jsx'));
 const CartPage = lazy(() => import('./components/screens/cart/Cart.jsx'));
+const HistoryPage = lazy(() => import('./components/screens/history/History.jsx'));
+const CouponsPage = lazy(() => import('./components/screens/coupons/Coupons.jsx'));
 // Shops
 const McdonaldsPage = lazy(() => import('./components/screens/shop/mcdonalds/Mcdonalds.jsx'));
 const KfcPage = lazy(() => import('./components/screens/shop/kfc/Kfc.jsx'));
@@ -27,12 +31,12 @@ const StarbucksPage = lazy(() => import('./components/screens/shop/starbucks/Sta
 
 const NotFoundPage = lazy(() => import('./components/screens/not-found/NotFound.jsx'));
 
-
-
-function App() {
+const App = () => {
 	return (
 		<Routes>
 			<Route path={home} element={<Layout/>}>
+				<Route path={history} element={<HistoryPage/>} />
+				<Route path={coupons} element={<CouponsPage/>} />
 				<Route path={shop} element={<ShopPage/>} />
 				<Route path={mcdonalds} element={<McdonaldsPage/>} />
 				<Route path={kfc} element={<KfcPage/>} />

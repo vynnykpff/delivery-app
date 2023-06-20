@@ -16,7 +16,7 @@ const reducers = combineReducers({
 	count: countReducer,
 	products: productsReducer,
 	statusCard: statusReducer,
-	address: addressReducer
+	address: addressReducer,
 });
 
 export const store = configureStore({

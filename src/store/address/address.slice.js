@@ -59,6 +59,7 @@ const addressSlice = createSlice({
 		from: '',
 		way: '',
 		descriptionWay: [],
+		data: {},
 		status: null,
 		error: null,
 	},
@@ -67,6 +68,12 @@ const addressSlice = createSlice({
 			state.where = action.payload.where;
 			state.from = action.payload.from;
 		},
+		setFormData: (state, action) => {
+			return {
+				...state,
+				data: action.payload,
+			}
+		}
 	},
 
 	extraReducers: {
@@ -108,7 +115,7 @@ const addressSlice = createSlice({
 	}
 })
 
-export const {setWay} = addressSlice.actions;
+export const {setWay, setFormData} = addressSlice.actions;
 
 export default addressSlice.reducer;
 
