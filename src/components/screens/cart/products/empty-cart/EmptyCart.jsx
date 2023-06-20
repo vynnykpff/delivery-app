@@ -3,7 +3,9 @@ import {EmptyCartImage} from "./EmptyCart.styled.jsx";
 
 const EmptyCart = () => {
 	return (
-		<EmptyCartImage src={image}/>
+		<div style={{margin: '0 auto'}}>
+			<EmptyCartImage src={image}/>
+		</div>
 	);
 };
 

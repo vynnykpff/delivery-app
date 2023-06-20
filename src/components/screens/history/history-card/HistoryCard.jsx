@@ -13,7 +13,7 @@ const HistoryCard = ({name, image, price, count}) => {
 			<HistoryCardImage src={image}/>
 			<HistoryCardInfo>
 				<HistoryCardTitle>{name}</HistoryCardTitle>
-				<HistoryCardCount>{count}</HistoryCardCount>
+				<HistoryCardCount>Count: {count}</HistoryCardCount>
 				<HistoryCardPrice>{NumberFormat('ru-RU', {
 					style: 'currency',
 					currency: 'UAH'

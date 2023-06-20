@@ -1,89 +1,85 @@
 import {useEffect, useState} from "react";
 import NumberFormat from "../../../utils/number-format.js";
-import CartItem from "../cart/products/cart-item/CartItem.jsx";
 import HistoryCard from "./history-card/HistoryCard.jsx";
+import {ClearButton, HistoryBlock, HistoryCardWrapper, OrderDate, OrderPrice} from "./History.styled.jsx";
+import HistoryOrder from "./history-order/HistoryOrder.jsx";
+import {BiInfoCircle} from "react-icons/bi";
+import {GrFormClose} from "react-icons/gr";
+import ModalWindow from "../../ui/modal-window/ModalWindow.jsx";
+import {CloseButton} from "../../ui/modal-window/ModalWindow.styled.jsx";
+import EmptyCart from "../cart/products/empty-cart/EmptyCart.jsx";
+import {Button} from "antd";
 
 const History = () => {
 	const [products, setProducts] = useState([]);
+	const [modalActive, setModalActive] = useState(false);
+	const [selectedOrder, setSelectedOrder] = useState(null);
 
 	useEffect(() => {
-		setProducts(JSON.parse(window.localStorage.getItem('Products')));
+		setProducts(JSON.parse(window.localStorage.getItem("Products")));
 	}, []);
 
+	const handleInfoClick = (order) => {
+		setSelectedOrder(order);
+		setModalActive(true);
+	};
+
+	const handleResetHistory = () => {
+		window.localStorage.removeItem("Products");
+		window.location.reload();
+	}
+
 	return (
-		<>
-			{products.map(p => (
-				<div key={p.id} style={{
-					color: '#fff',
-					border: '2px solid #f00',
-					display: 'flex',
-					flexDirection: 'column',
-					justifyContent: 'center',
-					alignItems: 'center'
-				}}>
-					<div>Order
-						with: {p.map(item => (`${item.date !== undefined ? item.date + ' /' : ''}  ${item.time !== undefined ? item.time : ''}`))}</div>
-					<div>
-						{p.map(item => item.id && <HistoryCard key={item.id} {...item}/>)}
-					</div>
-					<div>Info about order</div>
-					<ul>
-						<li>name: {p.map(item => item.userName)}</li>
-						<li>email: {p.map(item => item.userEmail)}</li>
-						<li>phone: {p.map(item => item.userPhone)}</li>
-						<li>address: {p.map(item => item.userAddress)}</li>
-					</ul>
-					<div>
-						<p>Total
-							price: {p.map(item => item.totalPrice !== undefined && NumberFormat('ru-RU', {style: 'currency', currency: 'UAH'}, item.totalPrice))}</p>
-					</div>
-				</div>
-			))
+		<div style={{marginTop: 40}}>
+			{products ?
+				products.map((p) => (
+					<>
+						<HistoryBlock key={p.id}>
+							<OrderDate>
+								Order with:{" "}
+								<span style={{fontWeight: 700}}>
+              {p.map(item => `${item.date !== undefined ? item.date + " /" : ""}  ${item.time !== undefined ? item.time : ""}`)}
+            </span>
+							</OrderDate>
+							<BiInfoCircle
+								style={{
+									fontSize: 28,
+									position: "absolute",
+									top: 20,
+									right: 20,
+									cursor: "pointer",
+								}}
+								onClick={() => handleInfoClick(p)}
+							/>
+							<HistoryCardWrapper>
+								{p.map((item) => item.id && <HistoryCard key={item.id} {...item} />)}
+							</HistoryCardWrapper>
+							<OrderPrice>
+								Total price:{" "}
+								<span style={{fontWeight: 700}}>
+              {p.map((item) => item.totalPrice !== undefined ? NumberFormat("ru-RU", {
+		              style: "currency",
+		              currency: "UAH"
+	              }, item.totalPrice) : null
+              )}
+            </span>
+							</OrderPrice>
+							<ModalWindow active={modalActive} setActive={setModalActive}>
+								<>
+									<CloseButton onClick={() => setModalActive(false)}>
+										<GrFormClose/>
+									</CloseButton>
+									{selectedOrder && <HistoryOrder data={selectedOrder}/>}
+								</>
+							</ModalWindow>
+						</HistoryBlock>
+						<ClearButton onClick={handleResetHistory}>Clear history</ClearButton>
+					</>
+				))
+				: <EmptyCart/>
 			}
-
-
-			{/*<div style={{color: '#fff'}}>*/}
-			{/*	<div>Замовлення</div>*/}
-			{/*	<div>*/}
-			{/*		{products.map(product => <img key={product.id} src={product.image} alt=""/>)}*/}
-			{/*	</div>*/}
-			{/*	<div>Info about order</div>*/}
-			{/*	<ul>*/}
-			{/*		<li>name: {data.userName}</li>*/}
-			{/*		<li>email: {data.userEmail}</li>*/}
-			{/*		<li>phone: {data.userPhone}</li>*/}
-			{/*		<li>address: {data.userAddress}</li>*/}
-			{/*	</ul>*/}
-			{/*	<div>*/}
-			{/*		<p>Total price: {totalSum}</p>*/}
-			{/*	</div>*/}
-			{/*</div>*/}
-
-			{/*{products.length > 0 ?*/}
-			{/*	products.map(product => (*/}
-			{/*		<div style={{color: "#fff"}} key={product.id}>*/}
-			{/*			<div>*/}
-			{/*				<img src={product.image} alt=""/>*/}
-			{/*				<p>{product.price}</p>*/}
-			{/*				<p>{product.count}</p>*/}
-			{/*			</div>*/}
-			{/*			<div>Info about order</div>*/}
-			{/*			<ul key={product.id}>*/}
-			{/*				<li>name: {data.userName}</li>*/}
-			{/*				<li>email: {data.userEmail}</li>*/}
-			{/*				<li>phone: {data.userPhone}</li>*/}
-			{/*				<li>address: {data.userAddress}</li>*/}
-			{/*			</ul>*/}
-			{/*			<div>*/}
-			{/*				<p>Total price:</p>*/}
-			{/*			</div>*/}
-			{/*		</div>*/}
-			{/*	))*/}
-			{/*	: <EmptyCart/>*/}
-			{/*}*/}
-		</>
+		</div>
 	);
 };
 
 export default History;
-	

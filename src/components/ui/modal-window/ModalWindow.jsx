@@ -1,6 +1,6 @@
 import {ModalContent, ModalOverlay} from "./ModalWindow.styled.jsx";
 
-const ModalWindow = ({ active, setActive, children }) => {
+const ModalWindow = ({active, setActive, children}) => {
 	return (
 		<ModalOverlay
 			className={
