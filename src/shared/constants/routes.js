@@ -2,7 +2,7 @@ export const ROUTES = {
 	basename: '/delivery-app',
 	home: '/',
 	shop: 'shop',
-	history: 'history',
+	history: '/history',
 	coupons: 'coupons',
 	shoppingCart: 'shopping-cart',
 	mcdonalds: 'shop/mcdonalds',

@@ -1,4 +1,4 @@
-import {FormBlock, FormItem, InputField, OrderBlock, SendButton, TotalPrice} from "./Form.styled.jsx";
+import {FormBlock, FormItem, InputField, OrderBlock, SelectField, SendButton, TotalPrice} from "./Form.styled.jsx";
 import NumberFormat from "../../../../utils/number-format.js";
 import {useDispatch, useSelector} from "react-redux";
 import {Controller, useForm} from "react-hook-form";
@@ -18,26 +18,43 @@ import {removeCoupon, setCoupon, updateOrdersCount} from "../../../../store/coup
 import {getRandomValue} from "../../../../utils/getRandomValue.js";
 import FormField from "./form-field/FormField.jsx";
 import FormModalWindow from "./form-modal-window/FormModalWindow.jsx";
+import {removeAllProducts, removeProduct} from "../../../../store/products/products.slice.js";
+import { useNavigate } from "react-router-dom";
+import {history} from "../../../../shared/constants/routes.js";
+
 
 const Form = () => {
-	const {arrayCoupons} = useSelector(state => state.coupons);
+	const {arrayCoupons, ordersCount} = useSelector(state => state.coupons);
 	const {arrayProducts} = useSelector((state) => state.products);
 	const {arrayAddress: address, status, way, descriptionWay} = useSelector(state => state.address);
-	// let totalCount = arrayProducts.reduce((acc, {price, count}) => acc + price * count, 0);
 	const dispatch = useDispatch();
 	const [whereWay, setWhereWay] = useState('');
 	const [modalActive, setModalActive] = useState(false);
 	const [totalCount, setTotalCount] = useState(0);
 	const [tempTotalCount, setTempTotalCount] = useState(0)
 	const [couponId, setCouponId] = useState(null);
-	// let totalSum = 0;
+
+	const navigate = useNavigate();
+
+	// const [cardProducts, setCardProducts] = useState(null);
+
+	console.log(arrayProducts);
 
 	useEffect(() => {
+		// window.localStorage.setItem('CartProducts', JSON.stringify(arrayProducts));
+		// setCardProducts(JSON.parse(window.localStorage.getItem('CartProducts')));
+
 		const summary = arrayProducts.reduce((acc, {price, count}) => acc + price * count, 0);
 		setTotalCount(summary);
 		setTempTotalCount(summary);
 	}, [arrayProducts]);
 
+	useEffect(() => {
+		if (ordersCount === 2) {
+			dispatch(setCoupon({id: uuidv4(), discount: getRandomValue(5, 20)}));
+			dispatch(updateOrdersCount());
+		}
+	}, [ordersCount]);
 
 	useEffect(() => {
 		dispatch(requestAddress());
@@ -57,16 +74,15 @@ const Form = () => {
 	});
 
 	const onSubmit = (data) => {
-		const storedProducts = JSON.parse(window.localStorage.getItem('Products'));
-		// arrayProducts.map(product => totalSum += product.price * product.count);
-
+		const storedProducts = JSON.parse(window.localStorage.getItem('HistoryProducts'));
 
 		if (storedProducts && storedProducts.length > 0) {
 			const newProducts = [...storedProducts];
 			newProducts.push([...arrayProducts, {...data, date: getDate(), time: getTime(), totalPrice: totalCount}]);
-			window.localStorage.setItem('Products', JSON.stringify(newProducts));
+			console.log('PRODUCTS:', arrayProducts);
+			window.localStorage.setItem('HistoryProducts', JSON.stringify(newProducts));
 		} else {
-			window.localStorage.setItem('Products', JSON.stringify([arrayProducts.concat({
+			window.localStorage.setItem('HistoryProducts', JSON.stringify([arrayProducts.concat({
 				...data,
 				date: getDate(),
 				time: getTime(),
@@ -74,13 +90,20 @@ const Form = () => {
 			})]));
 		}
 
+		window.localStorage.setItem('CartProducts', JSON.stringify([]));
+
 		dispatch(setFormData(data));
 		dispatch(requestGetWay());
 		dispatch(requestDescriptionWay());
 		dispatch(updateOrdersCount('update'));
+		dispatch(removeAllProducts());
+
+		navigate(history);
+
+
+
 
 		if (couponId) {
-			console.log('test')
 			dispatch(removeCoupon(couponId));
 		}
 
@@ -105,13 +128,12 @@ const Form = () => {
 					errors={errors}
 					name="userName"
 					control={control}
-					placeholder="Input name"
-					rules={{
-						required: {
-							value: true,
-							message: "Required field",
-						},
-					}}
+					// rules={{
+					// 	required: {
+					// 		value: true,
+					// 		message: "Required field",
+					// 	},
+					// }}
 				/>
 
 				<FormField
@@ -119,17 +141,17 @@ const Form = () => {
 					errors={errors}
 					name="userEmail"
 					control={control}
-					placeholder="Input email"
-					rules={{
-						required: {
-							value: true,
-							message: "Required field",
-						},
-						pattern: {
-							value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-							message: "Incorrect email format",
-						},
-					}}
+					placeholder="delivery@gmail.com"
+					// rules={{
+					// 	required: {
+					// 		value: true,
+					// 		message: "Required field",
+					// 	},
+					// 	pattern: {
+					// 		value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+					// 		message: "Incorrect email format",
+					// 	},
+					// }}
 				/>
 
 				<FormField
@@ -138,56 +160,78 @@ const Form = () => {
 					name="userPhone"
 					control={control}
 					placeholder="+38 (___) ___-__-__"
-					rules={{
-						required: {
-							value: true,
-							message: "Required field",
-						},
-						validate: (value) => {
-							const unmaskedValue = value.replace(/[^0-9]/g, "");
-							if (unmaskedValue.length < 12) {
-								return "Incorrect number. The number should be fully filled";
-							}
-							return true;
-						},
-					}}
+					// rules={{
+					// 	required: {
+					// 		value: true,
+					// 		message: "Required field",
+					// 	},
+					// 	validate: (value) => {
+					// 		const unmaskedValue = value.replace(/[^0-9]/g, "");
+					// 		if (unmaskedValue.length < 12) {
+					// 			return "Incorrect number. The number should be fully filled";
+					// 		}
+					// 		return true;
+					// 	},
+					// }}
 					mask="+38 (099) 999-99-99"
 					maskChar="_"
 				/>
 
 				<FormItem
-					label="Address"
-					validateStatus={errors.userAddress ? "error" : ""}
-					help={errors.userAddress && errors.userAddress.message}
+					label="From"
+					validateStatus={errors.userFrom ? "error" : ""}
+					help={errors.userFrom && errors.userFrom.message}
 					onBlur={(e) => setWhereWay(e.target.value)}
 				>
 					<Controller
-						name="userAddress"
+						name="userFrom"
 						control={control}
-						rules={{
-							required: {
-								value: true,
-								message: "Required field",
-							},
-						}}
+						// rules={{
+						// 	required: {
+						// 		value: true,
+						// 		message: "Required field",
+						// 	},
+						// }}
 						defaultValue=""
 						render={({field}) => (
-							<InputField {...field} placeholder="Where"/>
+							<InputField {...field}/>
 						)}
-					/>
-					<Select
-						style={{marginTop: 20}}
-						showSearch
-						placeholder="From"
-						optionFilterProp="children"
-						onChange={onChange}
-						filterOption={(input, option) =>
-							(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-						}
-						options={address.map(item => ({value: item.name, label: item.name}))}
 					/>
 				</FormItem>
 
+				<FormItem
+					label="Where"
+					validateStatus={errors.userWhere ? "error" : ""}
+					help={errors.userWhere && errors.userWhere.message}
+					onBlur={(e) => setWhereWay(e.target.value)}
+				>
+					<Controller
+						name="userWhere"
+						control={control}
+						// rules={{
+						// 	required: {
+						// 		value: true,
+						// 		message: "Required field",
+						// 	},
+						// }}
+						defaultValue=""
+						render={({field}) => (
+							<SelectField
+								allowClear={true}
+								{...field}
+								showSearch
+								optionFilterProp="children"
+								filterOption={(input, option) =>
+									(option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+								}
+								options={address.map((item) => ({
+									value: item.name,
+									label: item.name,
+								}))}
+							/>
+						)}
+					/>
+				</FormItem>
 
 				<FormItem
 					label="Coupons"
@@ -195,9 +239,9 @@ const Form = () => {
 					help={errors.userCoupons && errors.userCoupons.message}
 					onBlur={(e) => getRecountTotalPrice(e.target.value)}
 				>
-					<Select
+					<SelectField
+						allowClear={true}
 						showSearch
-						placeholder="Coupons"
 						optionFilterProp="children"
 						onChange={getRecountTotalPrice}
 						filterOption={(input, option) =>
@@ -206,19 +250,27 @@ const Form = () => {
 						options={arrayCoupons.map(coupon => ({value: coupon.id, label: `${coupon.discount}%`}))}
 					/>
 				</FormItem>
+
+
 				<OrderBlock>
 					<TotalPrice>{NumberFormat("ru-RU", {style: "currency", currency: "UAH"}, totalCount)}</TotalPrice>
 					<SendButton type="primary" htmlType="submit" disabled={!isValid}>
 						Submit
 					</SendButton>
 				</OrderBlock>
+
+
 			</FormBlock>
 
-			<FormModalWindow modalActive={modalActive} setModalActive={setModalActive} status={status} way={way}
-			                 descriptionWay={descriptionWay}/>
+			{/*<FormModalWindow*/}
+			{/*	modalActive={modalActive}*/}
+			{/*	setModalActive={setModalActive}*/}
+			{/*	status={status}*/}
+			{/*	way={way}*/}
+			{/*	descriptionWay={descriptionWay}*/}
+			{/*/>*/}
 		</>
 	);
 };
-
 
 export default Form;
