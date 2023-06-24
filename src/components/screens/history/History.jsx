@@ -8,7 +8,6 @@ import {GrFormClose} from "react-icons/gr";
 import ModalWindow from "../../ui/modal-window/ModalWindow.jsx";
 import {CloseButton} from "../../ui/modal-window/ModalWindow.styled.jsx";
 import EmptyCart from "../cart/products/empty-cart/EmptyCart.jsx";
-import {Button} from "antd";
 
 const History = () => {
 	const [products, setProducts] = useState([]);

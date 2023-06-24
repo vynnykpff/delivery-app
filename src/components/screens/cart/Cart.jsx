@@ -1,4 +1,4 @@
-import Form from "./form/FormElement.jsx";
+import Form from "./form/Form.jsx";
 import Products from "./products/Products.jsx";
 import {CartWrapper} from "./Cart.styled.jsx";
 import {useSelector} from "react-redux";

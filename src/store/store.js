@@ -7,6 +7,7 @@ import countReducer from './count-buys/countBuys.slice.js';
 import productsReducer from './products/products.slice.js';
 import statusReducer from './status-card/statusCard.slice.js';
 import addressReducer from './address/address.slice.js';
+import couponsReducer from './coupons/coupons.slice.js';
 
 const reducers = combineReducers({
 	theme: themeReducer,
@@ -17,6 +18,7 @@ const reducers = combineReducers({
 	products: productsReducer,
 	statusCard: statusReducer,
 	address: addressReducer,
+	coupons: couponsReducer,
 });
 
 export const store = configureStore({
