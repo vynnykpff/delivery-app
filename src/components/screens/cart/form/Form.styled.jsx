@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import {Button, Form, Input} from "antd";
+import {Button, Form, Input, Select} from "antd";
 import { baseBoxShadow, baseFontFamily } from "../../../../shared/constants/variables.js";
 import InputMask from "react-input-mask";
 
@@ -43,13 +43,6 @@ const InputFieldNumber = styled(InputMask)`
   outline: 0;
 	border-width: 1px;
 	
-	&:focus {
-    border-color: #4096ff;
-    box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1);
-    border-inline-end-width: 1px;
-    outline: 0;
-	}
-	
 	&.error {
 		border-color: #ff4d4f;
 	}
@@ -86,4 +79,14 @@ const SendButton = styled(Button)`
   }
 `;
 
-export { FormBlock, FormItem, InputField, InputFieldNumber, FieldError, SendButton, OrderBlock, TotalPrice };
+const SelectField = styled(Select)`
+  font-family: ${baseFontFamily};
+  box-shadow: ${baseBoxShadow};
+	
+	&.custom-option {
+		font-size: 40px;
+	}
+`;
+
+
+export { FormBlock, FormItem, InputField, InputFieldNumber, FieldError, SendButton, OrderBlock, TotalPrice, SelectField};

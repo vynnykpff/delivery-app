@@ -8,7 +8,6 @@ import {GrFormClose} from "react-icons/gr";
 import ModalWindow from "../../ui/modal-window/ModalWindow.jsx";
 import {CloseButton} from "../../ui/modal-window/ModalWindow.styled.jsx";
 import EmptyCart from "../cart/products/empty-cart/EmptyCart.jsx";
-import {Button} from "antd";
 
 const History = () => {
 	const [products, setProducts] = useState([]);
@@ -16,7 +15,7 @@ const History = () => {
 	const [selectedOrder, setSelectedOrder] = useState(null);
 
 	useEffect(() => {
-		setProducts(JSON.parse(window.localStorage.getItem("Products")));
+		setProducts(JSON.parse(window.localStorage.getItem("HistoryProducts")));
 	}, []);
 
 	const handleInfoClick = (order) => {
@@ -25,9 +24,11 @@ const History = () => {
 	};
 
 	const handleResetHistory = () => {
-		window.localStorage.removeItem("Products");
+		window.localStorage.removeItem("HistoryProducts");
 		window.location.reload();
 	}
+
+	console.log(products);
 
 	return (
 		<div style={{marginTop: 40}}>
