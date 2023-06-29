@@ -7,13 +7,26 @@ import {
 	TitleWay
 } from "../../../../ui/modal-window/ModalWindow.styled.jsx";
 import {GrFormClose} from "react-icons/gr";
+import {useNavigate} from "react-router-dom";
+import {history} from "../../../../../shared/constants/routes.js";
+import {removeAllProducts} from "../../../../../store/products/products.slice.js";
+import {useDispatch} from "react-redux";
 
 const FormModalWindow = ({modalActive, setModalActive, status, way, descriptionWay}) => {
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
+	const handleClick = () => {
+		setModalActive(false)
+		dispatch(removeAllProducts());
+		navigate(history);
+	}
+
 	return (
 		<ModalWindow active={modalActive} setActive={setModalActive}>
 			{status ?
 				<>
-					<CloseButton onClick={() => setModalActive(false)}><GrFormClose/></CloseButton>
+					<CloseButton onClick={handleClick}><GrFormClose/></CloseButton>
 					<MapInfoBlock>
 						<OrderTitle>The order has been processed</OrderTitle>
 						<TitleWay>Way from <span

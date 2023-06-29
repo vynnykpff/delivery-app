@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
 const countBuysSlice = createSlice({
 	name: 'count',
@@ -13,9 +13,12 @@ const countBuysSlice = createSlice({
 				state.count -= 1;
 			}
 		},
+		resetCount: (state) => {
+			state.count = 0;
+		}
 	},
 });
 
-export const { setCount } = countBuysSlice.actions;
+export const {setCount, resetCount} = countBuysSlice.actions;
 
 export default countBuysSlice.reducer;

@@ -9,21 +9,18 @@ const Products = memo(function Products() {
 	const {arrayProducts} = useSelector(state => state.products);
 	const [cardProducts, setCardProducts] = useState(null);
 
-	useEffect(() => {
-		if (arrayProducts.length > 1) {
-			window.localStorage.setItem('CartProducts', JSON.stringify(arrayProducts));
-		}
-		setCardProducts(JSON.parse(window.localStorage.getItem('CartProducts')));
-	}, [arrayProducts])
-
-
-	// console.log(cardProducts);
+	// useEffect(() => {
+	// 	if (arrayProducts?.length) {
+	// 		window.localStorage.setItem('CartProducts', JSON.stringify(arrayProducts));
+	// 	}
+	// 	setCardProducts(JSON.parse(window.localStorage.getItem('CartProducts')));
+	// }, [arrayProducts])
 
 	return (
 		<ProductsWrapper>
 			{
-				cardProducts?.length
-					? cardProducts.map(product => <CartItem key={uuidv4()} {...product} />)
+				arrayProducts.length
+					? arrayProducts.map(product => <CartItem key={uuidv4()} {...product} />)
 					: <EmptyCart/>
 			}
 		</ProductsWrapper>

@@ -20,22 +20,20 @@ const CartItem = ({image, name, price, count, id}) => {
 	const {arrayProducts} = useSelector(state => state.products);
 	const [cartProducts, setCardProducts] = useState([]);
 
-	useEffect(() => {
-		setCardProducts(JSON.parse(window.localStorage.getItem('CartProducts')));
-	}, [arrayProducts])
+	// useEffect(() => {
+	// 	setCardProducts(JSON.parse(window.localStorage.getItem('CartProducts')));
+	// }, [arrayProducts])
 
 	const handleChange = (e) => {
 		dispatch(setProductCount({id, count: e.target.value}));
 	}
 
-	console.log(cartProducts);
-
 	const handleClick = (id) => {
 		dispatch(removeProduct(id));
 		dispatch(toggleCardStatusInShop({ cardId: id, status: false }));
 		dispatch(setCount());
-		const removeHistoryProduct = cartProducts.filter(product => product.id !== id);
-		window.localStorage.setItem('CartProducts', JSON.stringify(removeHistoryProduct));
+		// const removeHistoryProduct = cartProducts.filter(product => product.id !== id);
+		// window.localStorage.setItem('CartProducts', JSON.stringify(removeHistoryProduct));
 	}
 
 	return (
