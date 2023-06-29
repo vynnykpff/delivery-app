@@ -2,7 +2,6 @@ import {FormBlock, FormItem, InputField, OrderBlock, SelectField, SendButton, To
 import NumberFormat from "../../../../utils/number-format.js";
 import {useDispatch, useSelector} from "react-redux";
 import {Controller, useForm} from "react-hook-form";
-import {Select} from "antd";
 import {v4 as uuidv4} from 'uuid';
 import {useEffect, useState} from "react";
 import {
@@ -19,9 +18,7 @@ import {getRandomValue} from "../../../../utils/getRandomValue.js";
 import FormField from "./form-field/FormField.jsx";
 import FormModalWindow from "./form-modal-window/FormModalWindow.jsx";
 import {removeAllProducts, removeProduct} from "../../../../store/products/products.slice.js";
-import { useNavigate } from "react-router-dom";
-import {history} from "../../../../shared/constants/routes.js";
-
+import {resetCount} from "../../../../store/count-buys/countBuys.slice.js";
 
 const Form = () => {
 	const {arrayCoupons, ordersCount} = useSelector(state => state.coupons);
@@ -34,16 +31,9 @@ const Form = () => {
 	const [tempTotalCount, setTempTotalCount] = useState(0)
 	const [couponId, setCouponId] = useState(null);
 
-	const navigate = useNavigate();
-
-	// const [cardProducts, setCardProducts] = useState(null);
-
-	console.log(arrayProducts);
+	const [coupons, setCoupons] = useState([]);
 
 	useEffect(() => {
-		// window.localStorage.setItem('CartProducts', JSON.stringify(arrayProducts));
-		// setCardProducts(JSON.parse(window.localStorage.getItem('CartProducts')));
-
 		const summary = arrayProducts.reduce((acc, {price, count}) => acc + price * count, 0);
 		setTotalCount(summary);
 		setTempTotalCount(summary);
@@ -51,17 +41,31 @@ const Form = () => {
 
 	useEffect(() => {
 		if (ordersCount === 2) {
-			dispatch(setCoupon({id: uuidv4(), discount: getRandomValue(5, 20)}));
+			const coupon = {id: uuidv4(), discount: getRandomValue(5, 20)};
+			const prevCoupons = JSON.parse(window.localStorage.getItem("Coupons")) || [];
+
+			const uniqueCoupons = [...prevCoupons, ...arrayCoupons, coupon].filter(
+				(value, index, self) =>
+					self.findIndex((v) => v.id === value.id) === index
+			);
+
+			window.localStorage.setItem("Coupons", JSON.stringify(uniqueCoupons));
+			dispatch(setCoupon(coupon));
 			dispatch(updateOrdersCount());
 		}
 	}, [ordersCount]);
 
 	useEffect(() => {
+		const prevCoupons = JSON.parse(window.localStorage.getItem("Coupons")) || [];
+		setCoupons([...prevCoupons])
+	}, [arrayCoupons]);
+
+	useEffect(() => {
 		dispatch(requestAddress());
-	}, [dispatch])
+	}, [dispatch]);
 
 	const onChange = (value) => {
-		dispatch(setWay({where: whereWay, from: value}))
+		dispatch(setWay({where: value, from: whereWay}));
 	};
 
 	const {
@@ -79,7 +83,6 @@ const Form = () => {
 		if (storedProducts && storedProducts.length > 0) {
 			const newProducts = [...storedProducts];
 			newProducts.push([...arrayProducts, {...data, date: getDate(), time: getTime(), totalPrice: totalCount}]);
-			console.log('PRODUCTS:', arrayProducts);
 			window.localStorage.setItem('HistoryProducts', JSON.stringify(newProducts));
 		} else {
 			window.localStorage.setItem('HistoryProducts', JSON.stringify([arrayProducts.concat({
@@ -90,21 +93,19 @@ const Form = () => {
 			})]));
 		}
 
-		window.localStorage.setItem('CartProducts', JSON.stringify([]));
+		// window.localStorage.removeItem('CartProducts');
 
 		dispatch(setFormData(data));
 		dispatch(requestGetWay());
 		dispatch(requestDescriptionWay());
 		dispatch(updateOrdersCount('update'));
-		dispatch(removeAllProducts());
-
-		navigate(history);
-
-
-
+		dispatch(resetCount());
 
 		if (couponId) {
 			dispatch(removeCoupon(couponId));
+			const prevCoupons = JSON.parse(window.localStorage.getItem("Coupons")) || [];
+			const removeLocalStorageCoupon = prevCoupons.filter(coupon => coupon.id !== couponId);
+			window.localStorage.setItem("Coupons", JSON.stringify(removeLocalStorageCoupon));
 		}
 
 		setModalActive(true);
@@ -113,7 +114,14 @@ const Form = () => {
 	};
 
 	const getRecountTotalPrice = (value) => {
-		const coupon = arrayCoupons.find(coupon => coupon.id === value);
+		let coupon;
+		if (arrayCoupons.length) {
+			coupon = arrayCoupons.find(coupon => coupon.id === value);
+		} else {
+			const prevCoupons = JSON.parse(window.localStorage.getItem("Coupons")) || [];
+			coupon = prevCoupons?.find(coupon => coupon.id === value);
+		}
+
 		if (coupon) {
 			setTotalCount(tempTotalCount - (tempTotalCount * (coupon.discount / 100)));
 			setCouponId(coupon.id)
@@ -128,12 +136,12 @@ const Form = () => {
 					errors={errors}
 					name="userName"
 					control={control}
-					// rules={{
-					// 	required: {
-					// 		value: true,
-					// 		message: "Required field",
-					// 	},
-					// }}
+					rules={{
+						required: {
+							value: true,
+							message: "Required field",
+						},
+					}}
 				/>
 
 				<FormField
@@ -142,16 +150,16 @@ const Form = () => {
 					name="userEmail"
 					control={control}
 					placeholder="delivery@gmail.com"
-					// rules={{
-					// 	required: {
-					// 		value: true,
-					// 		message: "Required field",
-					// 	},
-					// 	pattern: {
-					// 		value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-					// 		message: "Incorrect email format",
-					// 	},
-					// }}
+					rules={{
+						required: {
+							value: true,
+							message: "Required field",
+						},
+						pattern: {
+							value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+							message: "Incorrect email format",
+						},
+					}}
 				/>
 
 				<FormField
@@ -160,19 +168,19 @@ const Form = () => {
 					name="userPhone"
 					control={control}
 					placeholder="+38 (___) ___-__-__"
-					// rules={{
-					// 	required: {
-					// 		value: true,
-					// 		message: "Required field",
-					// 	},
-					// 	validate: (value) => {
-					// 		const unmaskedValue = value.replace(/[^0-9]/g, "");
-					// 		if (unmaskedValue.length < 12) {
-					// 			return "Incorrect number. The number should be fully filled";
-					// 		}
-					// 		return true;
-					// 	},
-					// }}
+					rules={{
+						required: {
+							value: true,
+							message: "Required field",
+						},
+						validate: (value) => {
+							const unmaskedValue = value.replace(/[^0-9]/g, "");
+							if (unmaskedValue.length < 12) {
+								return "Incorrect number. The number should be fully filled";
+							}
+							return true;
+						},
+					}}
 					mask="+38 (099) 999-99-99"
 					maskChar="_"
 				/>
@@ -186,12 +194,12 @@ const Form = () => {
 					<Controller
 						name="userFrom"
 						control={control}
-						// rules={{
-						// 	required: {
-						// 		value: true,
-						// 		message: "Required field",
-						// 	},
-						// }}
+						rules={{
+							required: {
+								value: true,
+								message: "Required field",
+							},
+						}}
 						defaultValue=""
 						render={({field}) => (
 							<InputField {...field}/>
@@ -203,23 +211,20 @@ const Form = () => {
 					label="Where"
 					validateStatus={errors.userWhere ? "error" : ""}
 					help={errors.userWhere && errors.userWhere.message}
-					onBlur={(e) => setWhereWay(e.target.value)}
 				>
 					<Controller
 						name="userWhere"
 						control={control}
-						// rules={{
-						// 	required: {
-						// 		value: true,
-						// 		message: "Required field",
-						// 	},
-						// }}
 						defaultValue=""
 						render={({field}) => (
 							<SelectField
 								allowClear={true}
 								{...field}
 								showSearch
+								onChange={(value) => {
+									field.onChange(value);
+									onChange(value);
+								}}
 								optionFilterProp="children"
 								filterOption={(input, option) =>
 									(option?.label ?? "").toLowerCase().includes(input.toLowerCase())
@@ -247,7 +252,7 @@ const Form = () => {
 						filterOption={(input, option) =>
 							(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
 						}
-						options={arrayCoupons.map(coupon => ({value: coupon.id, label: `${coupon.discount}%`}))}
+						options={coupons.map(coupon => ({value: coupon.id, label: `${coupon.discount}%`}))}
 					/>
 				</FormItem>
 
@@ -262,13 +267,13 @@ const Form = () => {
 
 			</FormBlock>
 
-			{/*<FormModalWindow*/}
-			{/*	modalActive={modalActive}*/}
-			{/*	setModalActive={setModalActive}*/}
-			{/*	status={status}*/}
-			{/*	way={way}*/}
-			{/*	descriptionWay={descriptionWay}*/}
-			{/*/>*/}
+			<FormModalWindow
+				modalActive={modalActive}
+				setModalActive={setModalActive}
+				status={status}
+				way={way}
+				descriptionWay={descriptionWay}
+			/>
 		</>
 	);
 };

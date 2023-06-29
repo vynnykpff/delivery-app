@@ -28,8 +28,6 @@ const History = () => {
 		window.location.reload();
 	}
 
-	console.log(products);
-
 	return (
 		<div style={{marginTop: 40}}>
 			{products ?
