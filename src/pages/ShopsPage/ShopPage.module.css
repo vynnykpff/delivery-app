@@ -1,0 +1,9 @@
+.wrapper {
+	text-align: center;
+	margin: 40px 0;
+}
+
+.shopsListContainer {
+	max-width: 50%;
+	margin: 0 auto;
+}

@@ -1,0 +1,18 @@
+.wrapperImage {
+	margin: 0 auto;
+}
+
+.noDataImage {
+	width: 180px;
+	height: 180px;
+	display: flex;
+	margin: 0 auto;
+}
+
+.noDataIcon {
+	display: flex;
+	justify-content: center;
+	margin: 40px 0px;
+	font-size: 50px;
+	color: #fff;
+}
