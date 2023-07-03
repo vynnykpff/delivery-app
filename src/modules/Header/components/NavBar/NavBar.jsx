@@ -1,7 +1,7 @@
-import logo from '../../../../shared/images/logo.png';
+import logo from '../../../../shared/images/logo.svg';
 import {
 	CountBuys,
-	LogoImage,
+	LogoImage, LogoTitle,
 	MobileNav,
 	Nav,
 	NavAdditionalList,
@@ -19,7 +19,6 @@ import {set} from "../../../../redux/theme/theme.slice.js";
 import {IoIosClose, IoIosMenu} from "react-icons/io";
 import {Container} from "../../../../shared/styles/GlobalStyles.jsx";
 import {v4 as uuidv4} from 'uuid';
-
 
 const NavBar = () => {
 	const [nav, setNav] = useState(false);
@@ -46,7 +45,10 @@ const NavBar = () => {
 		<Container>
 			<Nav>
 				<NavItem to={home}>
-					<LogoImage src={logo} alt="logo"/>
+					<div>
+						<LogoImage src={logo} alt="logo"/>
+						<LogoTitle>Foo</LogoTitle>
+					</div>
 				</NavItem>
 				<NavList>
 					{data.map(item =>

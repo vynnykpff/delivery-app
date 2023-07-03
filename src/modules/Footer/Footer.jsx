@@ -1,5 +1,5 @@
 import {FooterWrapper, RightsBlock} from "./Footer.styled.jsx";
-import logo from '../../shared/images/logo.png';
+import logo from '../../shared/images/logo.svg';
 import {LogoImage} from "../Header/components/NavBar/NavBar.styled.jsx";
 import {useEffect, useState} from "react";
 

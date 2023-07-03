@@ -266,13 +266,13 @@ const Form = () => {
 
 			</FormBlock>
 
-			<FormModalWindow
-				modalActive={modalActive}
-				setModalActive={setModalActive}
-				status={status}
-				way={way}
-				descriptionWay={descriptionWay}
-			/>
+			{/*<FormModalWindow*/}
+			{/*	modalActive={modalActive}*/}
+			{/*	setModalActive={setModalActive}*/}
+			{/*	status={status}*/}
+			{/*	way={way}*/}
+			{/*	descriptionWay={descriptionWay}*/}
+			{/*/>*/}
 		</>
 	);
 };

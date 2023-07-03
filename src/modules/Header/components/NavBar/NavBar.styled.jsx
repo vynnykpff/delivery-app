@@ -3,7 +3,7 @@ import {NavLink} from "react-router-dom";
 import {linkFontSize, mainTransition} from "../../../../shared/constants/constants.js";
 import {tablet} from "../../../../shared/constants/deviceSizes.js";
 
-const Nav = styled.nav`
+export const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -31,7 +31,7 @@ const Nav = styled.nav`
   //  }
 `
 
-const MobileNav = styled.div`
+export const MobileNav = styled.div`
   display: block;
   z-index: 10;
   @media (min-width: ${tablet}) {
@@ -39,22 +39,31 @@ const MobileNav = styled.div`
   }
 `;
 
-const LogoImage = styled.img`
-  width: 50px;
+export const LogoImage = styled.img`
+  width: 32px;
+	height: 32px;
+	margin-right: 5px;
 `;
 
-const NavList = styled.div`
+export const LogoTitle = styled.span`
+  color: #000;
+  font-size: 32px;
+  font-family: Poppins;
+  font-weight: 600;
+`;
+
+export const NavList = styled.div`
   display: flex;
   align-items: center;
   column-gap: 60px;
 `;
 
-const NavAdditionalList = styled.div`
+export const NavAdditionalList = styled.div`
   display: flex;
   column-gap: 25px;
 `;
 
-const NavItem = styled(NavLink)`
+export const NavItem = styled(NavLink)`
   display: flex;
   color: var(--link-color);
   text-decoration: none;
@@ -73,7 +82,7 @@ const NavItem = styled(NavLink)`
 	}
 `;
 
-const CountBuys = styled.span`
+export const CountBuys = styled.span`
   display: flex;
 	justify-content: center;
 	align-items: center;
@@ -90,7 +99,7 @@ const CountBuys = styled.span`
 	padding: 2px;
 `;
 
-const NavItemAnchor = styled.span`
+export const NavItemAnchor = styled.span`
   position: relative;
 
   &::after {
@@ -113,10 +122,7 @@ const NavItemAnchor = styled.span`
   }
 `
 
-const NavItemTheme = styled.span`
+export const NavItemTheme = styled.span`
   font-size: ${linkFontSize};
   cursor: pointer;
 `;
-
-
-export {Nav, MobileNav, LogoImage, NavList, NavAdditionalList, NavItemAnchor, NavItem, CountBuys, NavItemTheme};

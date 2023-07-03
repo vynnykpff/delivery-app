@@ -7,7 +7,7 @@ export const FooterWrapper = styled.footer`
 	align-items: center;
 	background-color: var(--footer-color);
 	color: var(--footer-color--text);
-	height: 150px;
+	min-height: 150px;
 	padding-top: 10px;
 `;
 

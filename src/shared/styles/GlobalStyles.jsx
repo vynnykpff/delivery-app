@@ -4,6 +4,7 @@ export const Container = styled.div`
   max-width: 1260px;
   margin: 0 auto;
   padding: 0 25px;
+	flex: 1 1 auto;
 `;
 
 export const Title = styled.h3`

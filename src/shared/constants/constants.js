@@ -3,7 +3,7 @@ export const CONSTANTS = {
 	linkFontSize: '20px',
 	subTitleFontSize: '22px',
 	titleFontSize: '25px',
-	mainFontFamily: 'JetBrains Mono, monospace',
+	mainFontFamily: 'Poppins, sans-serif',
 	mainBoxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
 	mainTransition: 'all 0.3s ease',
 };
