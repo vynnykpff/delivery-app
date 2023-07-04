@@ -2,10 +2,13 @@ import styled from "@emotion/styled";
 import {NavLink} from "react-router-dom";
 import {linkFontSize, mainTransition} from "../../../../shared/constants/constants.js";
 import {tablet} from "../../../../shared/constants/deviceSizes.js";
+import {CgProfile} from "react-icons/cg";
 
 export const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
+	max-width: 1400px;
+	margin: 0 auto;
   align-items: center;
   height: 100px;
 
@@ -41,14 +44,13 @@ export const MobileNav = styled.div`
 
 export const LogoImage = styled.img`
   width: 32px;
-	height: 32px;
-	margin-right: 5px;
+  height: 32px;
+  margin-right: 5px;
 `;
 
 export const LogoTitle = styled.span`
-  color: #000;
+  color: var(--text-color);
   font-size: 32px;
-  font-family: Poppins;
   font-weight: 600;
 `;
 
@@ -60,6 +62,7 @@ export const NavList = styled.div`
 
 export const NavAdditionalList = styled.div`
   display: flex;
+	align-items: center;
   column-gap: 25px;
 `;
 
@@ -69,34 +72,21 @@ export const NavItem = styled(NavLink)`
   text-decoration: none;
   font-size: ${linkFontSize};
   transition: ${mainTransition};
-	letter-spacing: 1.2px;
+  letter-spacing: 1.2px;
 
   &.active {
     text-decoration: none;
     transition: ${mainTransition};
     color: var(--accent-color);
+	  
+	  span {
+      color: var(--accent-color);
+	  }
   }
-	
-	&.shoppingCart {
-		position: relative;
-	}
-`;
 
-export const CountBuys = styled.span`
-  display: flex;
-	justify-content: center;
-	align-items: center;
-	position: absolute;
-	width: 15px;
-	height: 15px;
-	background-color: var(--text-color);
-	right: -8px;
-	top: -8px;
-	border-radius: 50%;
-	font-size: 14px;
-	color: var(--count-buys-color);
-	font-weight: 700;
-	padding: 2px;
+  &.shoppingCart {
+    position: relative;
+  }
 `;
 
 export const NavItemAnchor = styled.span`
@@ -122,7 +112,12 @@ export const NavItemAnchor = styled.span`
   }
 `
 
+export const ProfileIcon = styled(CgProfile)`
+	font-size: 30px;
+`;
+
 export const NavItemTheme = styled.span`
   font-size: ${linkFontSize};
   cursor: pointer;
 `;
+
