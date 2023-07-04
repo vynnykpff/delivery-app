@@ -1,6 +1,6 @@
 export const CONSTANTS = {
 	textFontSize: '16px',
-	linkFontSize: '20px',
+	linkFontSize: '22px',
 	subTitleFontSize: '22px',
 	titleFontSize: '25px',
 	mainFontFamily: 'Poppins, sans-serif',

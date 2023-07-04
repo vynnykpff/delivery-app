@@ -9,14 +9,21 @@
 :root[data-theme="light"] {
 	--background-color: #F4ECE1;
 	--header-color: #F4ECE1;
+	--accent-color: #FF7E00;
+	--divider-color: #948C8C4F;
+	--count-buys-color: #f5f6f7;
+	--count-color: #EC2633;
+	--secondary-color: #2F2F2F;
+	--play-button-color: #FFF8F0;
+	--tizer-color: #909090;
+
+
 	--footer-color: #bab3b1;
 	--footer-color--text: #d1d1d1;
 	--right-color: #868180;
 	--link-color: #242424;
-	--accent-color: #ff6600;
 	--shops-color: linear-gradient(122deg, rgba(245, 119, 106, 1) 4%, rgba(255, 186, 89, 1) 45%);
 	--text-color: #212121;
-	--count-buys-color: #f5f6f7;
 }
 
 :root[data-theme="dark"] {
@@ -47,8 +54,6 @@ body {
 	box-sizing: border-box;
 	background-color: var(--background-color);
 	transition: all 0.3s ease;
-	display: flex;
-	flex-direction: column;
 }
 
 
