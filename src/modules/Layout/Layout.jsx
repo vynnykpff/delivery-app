@@ -1,7 +1,7 @@
 import {Suspense} from 'react';
 import Header from "../Header/Header.jsx";
 import {Outlet} from "react-router-dom";
-import Loader from "../../shared/ui/Loader/Loader.jsx";
+import Loader from "../../shared/components/Loader/Loader.jsx";
 import Footer from "../Footer/Footer.jsx";
 import {Container} from "../../shared/styles/GlobalStyles.jsx";
 

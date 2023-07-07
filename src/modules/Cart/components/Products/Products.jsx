@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 import {v4 as uuidv4} from 'uuid';
 import {memo, useEffect, useState} from "react";
 import ProductCard from "./components/ProductCard/ProductCard.jsx";
-import NoData from "../../../../shared/ui/NoData/NoData.jsx";
+import NoData from "../../../../shared/components/NoData/NoData.jsx";
 import {BsCartX} from "react-icons/bs";
 
 const Products = memo(function Products() {

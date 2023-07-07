@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import NoData from "../../shared/ui/NoData/NoData.jsx";
+import NoData from "../../shared/components/NoData/NoData.jsx";
 import {FaHistory} from "react-icons/fa";
 
 const Coupons = () => {

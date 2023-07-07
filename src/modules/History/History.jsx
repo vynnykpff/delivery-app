@@ -5,9 +5,9 @@ import {HistoryBlock, HistoryCardWrapper, OrderDate, OrderPrice} from "./History
 import Order from "./components/Order/Order.jsx";
 import {BiInfoCircle} from "react-icons/bi";
 import {GrFormClose} from "react-icons/gr";
-import ModalWindow from "../../shared/ui/ModalWindow/ModalWindow.jsx";
-import {CloseButton} from "../../shared/ui/ModalWindow/ModalWindow.styled.jsx";
-import NoData from "../../shared/ui/NoData/NoData.jsx";
+import ModalWindow from "../../shared/components/ModalWindow/ModalWindow.jsx";
+import {CloseButton} from "../../shared/components/ModalWindow/ModalWindow.styled.jsx";
+import NoData from "../../shared/components/NoData/NoData.jsx";
 import {BsCartX} from "react-icons/bs";
 
 const History = ({products}) => {

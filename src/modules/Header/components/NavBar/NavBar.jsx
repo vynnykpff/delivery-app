@@ -16,7 +16,7 @@ import {
 	coupons,
 	delivery,
 	history,
-	home,
+	home, profile,
 	shop,
 	shoppingCart
 } from "../../../../shared/constants/routes.js";
@@ -82,7 +82,7 @@ const NavBar = () => {
 					{/*	</NavItem>*/}
 					{/*</div>*/}
 
-					<NavItem to={contacts}>
+					<NavItem to={profile}>
 						<ProfileIcon/>
 					</NavItem>
 					{/*<NavItem to={shoppingCart}>*/}
