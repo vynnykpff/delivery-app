@@ -5,10 +5,10 @@ const Order = ({data}) => {
 		<>
 			<OrderInfo>Info about order</OrderInfo>
 			<OrderInfoList>
-				<OrderInfoItem>name: {data.map(item => item.userName)}</OrderInfoItem>
-				<OrderInfoItem>email: {data.map(item => item.userEmail)}</OrderInfoItem>
-				<OrderInfoItem>phone: {data.map(item => item.userPhone)}</OrderInfoItem>
-				<OrderInfoItem>address: {data.map(item => item.userAddress)}</OrderInfoItem>
+				<OrderInfoItem>name: {data.userName}</OrderInfoItem>
+				<OrderInfoItem>email: {data.userEmail}</OrderInfoItem>
+				<OrderInfoItem>phone: {data.userPhone}</OrderInfoItem>
+				<OrderInfoItem>address: {`${data.userFrom} / ${data.userWhere}`}</OrderInfoItem>
 			</OrderInfoList>
 		</>
 	);

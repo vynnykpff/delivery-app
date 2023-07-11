@@ -8,13 +8,14 @@ export const ROUTES = {
 	about: 'about',
 	delivery: 'delivery',
 	contacts: 'contacts',
-	history: 'history',
-	coupons: 'coupons',
 	shoppingCart: 'shopping-cart',
 
 	profile: '/profile',
-	login: 'login',
-	register: 'register',
+	history: '/profile/history',
+	coupons: '/profile/coupons',
+
+	login: '/login',
+	register: '/register',
 
 	all: '*',
 };

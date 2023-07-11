@@ -2,6 +2,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import NoData from "../../shared/components/NoData/NoData.jsx";
 import {FaHistory} from "react-icons/fa";
+import {useNavigate} from "react-router-dom";
+import {getCookie} from "../../shared/utils/cookies/getCookie.js";
 
 const Coupons = () => {
 	const {totalOrdersCount, arrayCoupons} = useSelector(
@@ -28,27 +30,36 @@ const Coupons = () => {
 		}
 	}, [arrayCoupons]);
 
+	const isAuthValue = getCookie('isAuth');
+	const navigate = useNavigate();
+
 	return (
 		<>
-			{totalCoupons.length ? (
-				totalCoupons.map((coupon) => (
-					<div
-						style={{
-							background: "#ccc",
-							width: 450,
-							padding: 20,
-							borderRadius: 20,
-							margin: 40,
-						}}
-						key={coupon.id}
-					>
-						<p>Number: {coupon.id}</p>
-						<p>Discount: {coupon.discount}%</p>
+			{
+				isAuthValue ?
+					<div>
+						{totalCoupons.length ? (
+							totalCoupons.map((coupon) => (
+								<div
+									style={{
+										background: "#ccc",
+										width: 450,
+										padding: 20,
+										borderRadius: 20,
+										margin: 40,
+									}}
+									key={coupon.id}
+								>
+									<p>Number: {coupon.id}</p>
+									<p>Discount: {coupon.discount}%</p>
+								</div>
+							))
+						) : (
+							<NoData icon={<FaHistory/>}/>
+						)}
 					</div>
-				))
-			) : (
-				<NoData icon={<FaHistory/>}/>
-			)}
+					: navigate('/login')
+			}
 		</>
 	);
 };

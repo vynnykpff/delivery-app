@@ -33,7 +33,7 @@ const FormModalWindow = ({modalActive, setModalActive, status, way, descriptionW
 							style={{color: 'var(--accent-color)'}}>{descriptionWay?.route?.locations[1]?.adminArea5}</span> to <span
 							style={{color: 'var(--accent-color)'}}>{descriptionWay?.route?.locations[0]?.adminArea5}</span></TitleWay>
 						<MapImage
-							src={way}/>
+							src={`https://www.mapquestapi.com/${way}`}/>
 						<DescriptionOfWay>
 							<p>Distance: <span
 								style={{color: 'var(--accent-color)'}}>{Math.round(descriptionWay?.route?.distance * 100) / 100}</span> km
