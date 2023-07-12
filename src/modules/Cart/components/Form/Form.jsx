@@ -11,15 +11,16 @@ import {
 	setFormData,
 	setWay
 } from "../../../../redux/address/address.slice.js";
-
-import {getTime, getDate} from "../../../../shared/utils/getTimeline.js";
+import {getDate, getTime} from "../../../../shared/utils/getTimeline.js";
 import {removeCoupon, setCoupon, updateOrdersCount} from "../../../../redux/coupons/coupons.slice.js";
 import {getRandomValue} from "../../../../shared/utils/getRandomValue.js";
-import {removeAllProducts, removeProduct} from "../../../../redux/products/products.slice.js";
 import {resetCount} from "../../../../redux/count-buys/countBuys.slice.js";
 import {getDataFromLocalStorage, setDataToLocalStorage} from "../../../../shared/utils/getDataFromLocalStorage.js";
 import FormField from "./components/FormField/FormField.jsx";
 import FormModalWindow from "./components/FormModalWindow/FormModalWindow.jsx";
+import {createData} from "../../../../shared/utils/firebase/createData.js";
+import {auth, database} from "../../../../shared/utils/firebase/firebase-config.js";
+import {updateData} from "../../../../shared/utils/firebase/updateData.js";
 
 const Form = () => {
 	const {arrayCoupons, ordersCount} = useSelector(state => state.coupons);
@@ -31,7 +32,6 @@ const Form = () => {
 	const [totalCount, setTotalCount] = useState(0);
 	const [tempTotalCount, setTempTotalCount] = useState(0)
 	const [couponId, setCouponId] = useState(null);
-
 	const [coupons, setCoupons] = useState([]);
 
 	useEffect(() => {
@@ -74,22 +74,18 @@ const Form = () => {
 		mode: "onBlur",
 	});
 
-	const onSubmit = (data) => {
-		const storedProducts = getDataFromLocalStorage("HistoryProducts");
+	const onSubmit = async (data) => {
+		const orderData = {
+			...data,
+			date: getDate(),
+			time: getTime(),
+			totalPrice: totalCount,
+		};
 
-		if (storedProducts && storedProducts.length > 0) {
-			const newProducts = [...storedProducts];
-			newProducts.push([...arrayProducts, {...data, date: getDate(), time: getTime(), totalPrice: totalCount}]);
-			setDataToLocalStorage("HistoryProducts", newProducts)
-		} else {
-			const arrayHistoryProducts = [arrayProducts.concat({
-				...data,
-				date: getDate(),
-				time: getTime(),
-				totalPrice: totalCount
-			})]
-			setDataToLocalStorage("HistoryProducts", arrayHistoryProducts)
-		}
+		const userId = auth?.currentUser?.uid;
+		const documentRef = await createData(database, `orders-${userId}`, arrayProducts, "order");
+		const documentId = documentRef.id;
+		await updateData(database, `orders-${userId}`, documentId, "data", orderData);
 
 		if (couponId) {
 			dispatch(removeCoupon(couponId));
@@ -129,12 +125,12 @@ const Form = () => {
 					errors={errors}
 					name="userName"
 					control={control}
-					// rules={{
-					// 	required: {
-					// 		value: true,
-					// 		message: "Required field",
-					// 	},
-					// }}
+					rules={{
+						required: {
+							value: true,
+							message: "Required field",
+						},
+					}}
 				/>
 
 				<FormField
@@ -143,16 +139,16 @@ const Form = () => {
 					name="userEmail"
 					control={control}
 					placeholder="delivery@gmail.com"
-					// rules={{
-					// 	required: {
-					// 		value: true,
-					// 		message: "Required field",
-					// 	},
-					// 	pattern: {
-					// 		value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-					// 		message: "Incorrect email format",
-					// 	},
-					// }}
+					rules={{
+						required: {
+							value: true,
+							message: "Required field",
+						},
+						pattern: {
+							value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+							message: "Incorrect email format",
+						},
+					}}
 				/>
 
 				<FormField
@@ -161,19 +157,19 @@ const Form = () => {
 					name="userPhone"
 					control={control}
 					placeholder="+38 (___) ___-__-__"
-					// rules={{
-					// 	required: {
-					// 		value: true,
-					// 		message: "Required field",
-					// 	},
-					// 	validate: (value) => {
-					// 		const unmaskedValue = value.replace(/[^0-9]/g, "");
-					// 		if (unmaskedValue.length < 12) {
-					// 			return "Incorrect number. The number should be fully filled";
-					// 		}
-					// 		return true;
-					// 	},
-					// }}
+					rules={{
+						required: {
+							value: true,
+							message: "Required field",
+						},
+						validate: (value) => {
+							const unmaskedValue = value.replace(/[^0-9]/g, "");
+							if (unmaskedValue.length < 12) {
+								return "Incorrect number. The number should be fully filled";
+							}
+							return true;
+						},
+					}}
 					mask="+38 (099) 999-99-99"
 					maskChar="_"
 				/>
@@ -187,12 +183,12 @@ const Form = () => {
 					<Controller
 						name="userFrom"
 						control={control}
-						// rules={{
-						// 	required: {
-						// 		value: true,
-						// 		message: "Required field",
-						// 	},
-						// }}
+						rules={{
+							required: {
+								value: true,
+								message: "Required field",
+							},
+						}}
 						defaultValue=""
 						render={({field}) => (
 							<InputField {...field}/>
@@ -209,12 +205,12 @@ const Form = () => {
 						name="userWhere"
 						control={control}
 						defaultValue=""
-						// rules={{
-						// 	required: {
-						// 		value: true,
-						// 		message: "Required field",
-						// 	},
-						// }}
+						rules={{
+							required: {
+								value: true,
+								message: "Required field",
+							},
+						}}
 						render={({field}) => (
 							<SelectField
 								allowClear={true}
@@ -255,24 +251,21 @@ const Form = () => {
 					/>
 				</FormItem>
 
-
 				<OrderBlock>
 					<TotalPrice>{SetNumberFormat("ru-RU", {style: "currency", currency: "UAH"}, totalCount)}</TotalPrice>
 					<SendButton type="primary" htmlType="submit" disabled={!isValid}>
 						Submit
 					</SendButton>
 				</OrderBlock>
-
-
 			</FormBlock>
 
-			{/*<FormModalWindow*/}
-			{/*	modalActive={modalActive}*/}
-			{/*	setModalActive={setModalActive}*/}
-			{/*	status={status}*/}
-			{/*	way={way}*/}
-			{/*	descriptionWay={descriptionWay}*/}
-			{/*/>*/}
+			<FormModalWindow
+				modalActive={modalActive}
+				setModalActive={setModalActive}
+				status={status}
+				way={way}
+				descriptionWay={descriptionWay}
+			/>
 		</>
 	);
 };

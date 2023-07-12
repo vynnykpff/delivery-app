@@ -1,14 +1,22 @@
 export const ROUTES = {
 	basename: '/delivery-app',
 	home: '/',
+
 	shop: 'shop',
 	selectShop: 'shop/:name',
+
 	about: 'about',
 	delivery: 'delivery',
 	contacts: 'contacts',
-	history: '/history',
-	coupons: 'coupons',
 	shoppingCart: 'shopping-cart',
+
+	profile: '/profile',
+	history: '/profile/history',
+	coupons: '/profile/coupons',
+
+	login: '/login',
+	register: '/register',
+
 	all: '*',
 };
 
@@ -23,5 +31,8 @@ export const {
 	history,
 	coupons,
 	shoppingCart,
+	profile,
+	login,
+	register,
 	all,
 } = ROUTES;

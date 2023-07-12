@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useMemo} from "react";
 import {requestMenu} from "../../../../redux/menu/menu.slice.js";
 import {v4 as uuidv4} from 'uuid';
-import {Option, Select} from "../../../../shared/ui/Select/Select.styled.jsx";
+import {Option, Select} from "../../../../shared/components/Select/Select.styled.jsx";
 import {setSelectValue} from "../../../../redux/select/select.slice.js";
 import Card from "../Card/Card.jsx";
 import ShopsList from "../ShopsList/ShopsList.jsx";

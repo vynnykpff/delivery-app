@@ -5,6 +5,7 @@ import './index.css'
 import {HashRouter} from "react-router-dom";
 import {Provider} from "react-redux";
 import {store} from "./redux/store.js";
+import './shared/utils/firebase/firebase-config.js';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<React.StrictMode>
