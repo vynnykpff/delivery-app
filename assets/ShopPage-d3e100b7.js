@@ -1,0 +1,1 @@
+import{j as s,T as t}from"./index-3260ee99.js";import{S as e}from"./ShopsList-4f2872f1.js";const o="_wrapper_1q97w_1",p="_shopsListContainer_1q97w_11",r={wrapper:o,shopsListContainer:p},n=()=>s.jsxs("div",{className:r.wrapper,children:[s.jsx(t,{children:"Select Shop"}),s.jsx("div",{className:r.shopsListContainer,children:s.jsx(e,{})})]});export{n as default};

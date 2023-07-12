@@ -1,0 +1,1 @@
+import{j as a}from"./index-3260ee99.js";import{s}from"./NoData.module-4f41915b.js";const o=({image:r,icon:e=null})=>a.jsx("div",{className:s.wrapperImage,children:e?a.jsx("span",{className:s.noDataIcon,children:e}):a.jsx("img",{className:s.noDataImage,src:r,alt:"empty-icon"})});export{o as N};
