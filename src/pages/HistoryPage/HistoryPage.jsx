@@ -8,6 +8,7 @@ import {getDecryptedData} from "../../shared/utils/encrypted/getDecryptedData.js
 import {useNavigate} from "react-router-dom";
 import {login} from "../../shared/constants/routes.js";
 import {deleteCookie} from "../../shared/utils/cookies/deleteCookie.js";
+import {collection, deleteDoc, getDocs} from "firebase/firestore";
 
 const HistoryPage = () => {
 	const [collectionOrders, setCollectionOrders] = useState([]);
@@ -31,18 +32,16 @@ const HistoryPage = () => {
 		getHistory();
 	}, []);
 
-	const handleResetHistory = () => {
-		// window.localStorage.removeItem("HistoryProducts");
-		// window.location.reload(); // TODO: FIX
+	const handleResetHistory = async () => {
+
+		// TODO: create a function
 		const userId = auth?.currentUser?.uid;
-		const collectionRef = database.collection(`orders-${userId}`);
+		const collectionRef = collection(database, `orders-${userId}`);
+		const snapshots = await getDocs(collectionRef);
 
-		collectionRef.delete().then(() => {
-			console.log('Collection successfully deleted.');
-		}).catch((error) => {
-			console.error('Error deleting collection: ', error);
+		snapshots.forEach(async (doc) => {
+			await deleteDoc(doc.ref);
 		});
-
 	};
 
 	return (
