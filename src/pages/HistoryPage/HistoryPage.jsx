@@ -1,14 +1,12 @@
 import History from "../../modules/History/History.jsx";
 import {ClearButton} from "../../modules/History/History.styled.jsx";
 import {useEffect, useState} from "react";
-import {getData} from "../../shared/utils/firebase/getData.js";
-import {auth, database} from "../../shared/utils/firebase/firebase-config.js";
-import {getCookie} from "../../shared/utils/cookies/getCookie.js";
-import {getDecryptedData} from "../../shared/utils/encrypted/getDecryptedData.js";
 import {useNavigate} from "react-router-dom";
-import {login} from "../../shared/constants/routes.js";
-import {deleteCookie} from "../../shared/utils/cookies/deleteCookie.js";
-import {collection, deleteDoc, getDocs} from "firebase/firestore";
+import {login, profile} from "../../shared/constants/routes.js";
+import {deleteCollection} from "../../shared/utils/deleteCollection.js";
+import {getCollection} from "../../shared/utils/firebase/getCollection.js";
+import NoData from "../../shared/components/NoData/NoData.jsx";
+import {FaHistory} from "react-icons/fa";
 
 const HistoryPage = () => {
 	const [collectionOrders, setCollectionOrders] = useState([]);
@@ -16,38 +14,32 @@ const HistoryPage = () => {
 
 	useEffect(() => {
 		const getHistory = async () => {
-			try {
-				const cookieUserId = getDecryptedData(getCookie("userId"));
-				if (auth.currentUser || cookieUserId) {
-					const userId = auth?.currentUser?.uid;
-					const data = await getData(database, `orders-${userId ? userId : cookieUserId}`);
-					setCollectionOrders(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
-				}
-			} catch (e) {
-				deleteCookie("isAuth");
-				navigate(login)
+			const data = await getCollection("orders");
+			if (data) {
+				setCollectionOrders(data);
+			} else {
+				navigate(login);
 			}
-		};
+		}
 
 		getHistory();
-	}, []);
+
+	}, [navigate]);
 
 	const handleResetHistory = async () => {
-
-		// TODO: create a function
-		const userId = auth?.currentUser?.uid;
-		const collectionRef = collection(database, `orders-${userId}`);
-		const snapshots = await getDocs(collectionRef);
-
-		snapshots.forEach(async (doc) => {
-			await deleteDoc(doc.ref);
-		});
+		await deleteCollection(["orders"]);
+		navigate(profile);
 	};
 
 	return (
 		<>
-			<History collectionOrders={collectionOrders}/>
-			{collectionOrders && <ClearButton onClick={handleResetHistory}>Clear history</ClearButton>}
+			{collectionOrders.length ?
+				<>
+					<ClearButton onClick={handleResetHistory}>Clear history</ClearButton>
+					<History collectionOrders={collectionOrders}/>
+				</>
+				:
+				<NoData icon={<FaHistory/>}/>}
 		</>
 	);
 };
