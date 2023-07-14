@@ -21,6 +21,11 @@ import FormModalWindow from "./components/FormModalWindow/FormModalWindow.jsx";
 import {createData} from "../../../../shared/utils/firebase/createData.js";
 import {auth, database} from "../../../../shared/utils/firebase/firebase-config.js";
 import {updateData} from "../../../../shared/utils/firebase/updateData.js";
+import {getCollection} from "../../../../shared/utils/firebase/getCollection.js";
+import {login} from "../../../../shared/constants/routes.js";
+import {useNavigate} from "react-router-dom";
+import {deleteData} from "../../../../shared/utils/firebase/deleteData.js";
+import {getData} from "../../../../shared/utils/firebase/getData.js";
 
 const Form = () => {
 	const {arrayCoupons, ordersCount} = useSelector(state => state.coupons);
@@ -43,19 +48,42 @@ const Form = () => {
 	useEffect(() => {
 		if (ordersCount === 2) {
 			const coupon = {id: uuidv4(), discount: getRandomValue(5, 20)};
-			const uniqueCoupons = [...getDataFromLocalStorage("Coupons"), ...arrayCoupons, coupon].filter(
-				(value, index, self) =>
-					self.findIndex((v) => v.id === value.id) === index
-			);
-			setDataToLocalStorage("Coupons", uniqueCoupons);
+			const setNewCoupon = async () => {
+				const userId = auth?.currentUser?.uid;
+				const documentRef = await createData(database, `coupons-${userId}`, coupon, "coupon");
+				await updateData(database, `coupons-${userId}`, documentRef.id, "coupon.id", documentRef.id);
+			}
+
+			setNewCoupon();
+
+			// const uniqueCoupons = [...getDataFromLocalStorage("Coupons"), ...arrayCoupons, coupon].filter(
+			// 	(value, index, self) =>
+			// 		self.findIndex((v) => v.id === value.id) === index
+			// );
+			// setDataToLocalStorage("Coupons", uniqueCoupons);
 			dispatch(setCoupon(coupon));
 			dispatch(updateOrdersCount());
 		}
 	}, [ordersCount]);
 
+	const navigate = useNavigate();
 	useEffect(() => {
-		setCoupons([...getDataFromLocalStorage("Coupons")])
+		const getCoupons = async () => {
+			const data = await getCollection("coupons");
+			if (data) {
+				setCoupons([...data]);
+			} else {
+				navigate(login);
+			}
+		}
+
+		getCoupons();
 	}, [arrayCoupons]);
+
+	// useEffect(() => {
+	// 	// setCoupons([...getDataFromLocalStorage("Coupons")])
+	//
+	// }, [arrayCoupons]);
 
 	useEffect(() => {
 		dispatch(requestAddress());
@@ -88,9 +116,15 @@ const Form = () => {
 		await updateData(database, `orders-${userId}`, documentId, "data", orderData);
 
 		if (couponId) {
+			// TODO: Setting delete coupon
 			dispatch(removeCoupon(couponId));
-			const removeLocalStorageCoupon = getDataFromLocalStorage("Coupons").filter(coupon => coupon.id !== couponId);
-			setDataToLocalStorage("Coupons", removeLocalStorageCoupon);
+			const removeCouponTest = await getCollection("coupons");
+			const newData = removeCouponTest.find(coupon => coupon.coupon.id === couponId);
+
+			// const myCoupons = await getData(database, `coupons-${userId}`);
+			// myCoupons.docs.forEach(coupon => console.log(coupon.id));
+
+			await deleteData(database, `coupons-${userId}`, newData.id);
 		}
 
 		dispatch(setFormData(data));
@@ -104,16 +138,28 @@ const Form = () => {
 		reset();
 	};
 
-	const getRecountTotalPrice = (value) => {
-		let coupon;
-		if (arrayCoupons.length) {
-			coupon = arrayCoupons.find(coupon => coupon.id === value);
-		} else {
-			coupon = getDataFromLocalStorage("Coupons")?.find(coupon => coupon.id === value);
-		}
+	const getRecountTotalPrice = async (value) => {
+		// if (arrayCoupons.length) {
+		// 	console.log('test');
+		// 	// coupon = arrayCoupons.find(coupon => coupon.id === value);
+		// 	// coupon = arrayCoupons.find(coupon => console.log(coupon));
+		// } else {
+		// 	console.log('not');
+		// 	const data = await getCollection("coupons");
+		// 	coupon = data.find(coupon => coupon.coupon.id === value);
+		// 	// coupon = await getCollection("coupons")?.find(coupon => coupon.id === value);
+		//
+		// 	// coupon = await getCollection("coupons");
+		//
+		// 	// coupon.map(item => console.log('ITEM:', item.coupon));
+		// }
+
+		const data = await getCollection("coupons");
+		const coupon = data.find(coupon => coupon.id === value);
+
 		if (coupon) {
-			setTotalCount(tempTotalCount - (tempTotalCount * (coupon.discount / 100)));
-			setCouponId(coupon.id)
+			setTotalCount(tempTotalCount - (tempTotalCount * (coupon.coupon.discount / 100)));
+			setCouponId(coupon.id);
 		}
 	}
 
@@ -125,12 +171,12 @@ const Form = () => {
 					errors={errors}
 					name="userName"
 					control={control}
-					rules={{
-						required: {
-							value: true,
-							message: "Required field",
-						},
-					}}
+					// rules={{
+					// 	required: {
+					// 		value: true,
+					// 		message: "Required field",
+					// 	},
+					// }}
 				/>
 
 				<FormField
@@ -139,16 +185,16 @@ const Form = () => {
 					name="userEmail"
 					control={control}
 					placeholder="delivery@gmail.com"
-					rules={{
-						required: {
-							value: true,
-							message: "Required field",
-						},
-						pattern: {
-							value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-							message: "Incorrect email format",
-						},
-					}}
+					// rules={{
+					// 	required: {
+					// 		value: true,
+					// 		message: "Required field",
+					// 	},
+					// 	pattern: {
+					// 		value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+					// 		message: "Incorrect email format",
+					// 	},
+					// }}
 				/>
 
 				<FormField
@@ -157,19 +203,19 @@ const Form = () => {
 					name="userPhone"
 					control={control}
 					placeholder="+38 (___) ___-__-__"
-					rules={{
-						required: {
-							value: true,
-							message: "Required field",
-						},
-						validate: (value) => {
-							const unmaskedValue = value.replace(/[^0-9]/g, "");
-							if (unmaskedValue.length < 12) {
-								return "Incorrect number. The number should be fully filled";
-							}
-							return true;
-						},
-					}}
+					// rules={{
+					// 	required: {
+					// 		value: true,
+					// 		message: "Required field",
+					// 	},
+					// 	validate: (value) => {
+					// 		const unmaskedValue = value.replace(/[^0-9]/g, "");
+					// 		if (unmaskedValue.length < 12) {
+					// 			return "Incorrect number. The number should be fully filled";
+					// 		}
+					// 		return true;
+					// 	},
+					// }}
 					mask="+38 (099) 999-99-99"
 					maskChar="_"
 				/>
@@ -183,12 +229,12 @@ const Form = () => {
 					<Controller
 						name="userFrom"
 						control={control}
-						rules={{
-							required: {
-								value: true,
-								message: "Required field",
-							},
-						}}
+						// rules={{
+						// 	required: {
+						// 		value: true,
+						// 		message: "Required field",
+						// 	},
+						// }}
 						defaultValue=""
 						render={({field}) => (
 							<InputField {...field}/>
@@ -205,12 +251,12 @@ const Form = () => {
 						name="userWhere"
 						control={control}
 						defaultValue=""
-						rules={{
-							required: {
-								value: true,
-								message: "Required field",
-							},
-						}}
+						// rules={{
+						// 	required: {
+						// 		value: true,
+						// 		message: "Required field",
+						// 	},
+						// }}
 						render={({field}) => (
 							<SelectField
 								allowClear={true}
@@ -247,7 +293,7 @@ const Form = () => {
 						filterOption={(input, option) =>
 							(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
 						}
-						options={coupons.map(coupon => ({value: coupon.id, label: `${coupon.discount}%`}))}
+						options={coupons.map(coupon => ({value: coupon.coupon.id, label: `${coupon.coupon.discount}%`}))}
 					/>
 				</FormItem>
 
@@ -259,13 +305,13 @@ const Form = () => {
 				</OrderBlock>
 			</FormBlock>
 
-			<FormModalWindow
-				modalActive={modalActive}
-				setModalActive={setModalActive}
-				status={status}
-				way={way}
-				descriptionWay={descriptionWay}
-			/>
+			{/*<FormModalWindow*/}
+			{/*	modalActive={modalActive}*/}
+			{/*	setModalActive={setModalActive}*/}
+			{/*	status={status}*/}
+			{/*	way={way}*/}
+			{/*	descriptionWay={descriptionWay}*/}
+			{/*/>*/}
 		</>
 	);
 };

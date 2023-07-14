@@ -1,6 +1,6 @@
 import {CardsBlock, ShopsMenu} from "./Menu.styled.jsx";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useMemo} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {requestMenu} from "../../../../redux/menu/menu.slice.js";
 import {v4 as uuidv4} from 'uuid';
 import {Option, Select} from "../../../../shared/components/Select/Select.styled.jsx";
@@ -39,6 +39,21 @@ const Menu = ({shops}) => {
 		}
 		return [];
 	};
+
+
+
+	useEffect(() => {
+		console.log(menu)
+		menu.map(item => {
+			const data = Object.values(item);
+			const newData = data.map(item => Object.values(item));
+			const newValue = newData.flat(2);
+			// console.log(newValue);
+
+		});
+
+	}, [menu])
+
 
 	return (
 		<ShopsMenu>

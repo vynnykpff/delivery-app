@@ -1,20 +1,21 @@
-import {getAuth, deleteUser} from "firebase/auth";
+import {deleteUser, getAuth} from "firebase/auth";
 import {useNavigate} from "react-router-dom";
 import {deleteCookie} from "../utils/cookies/deleteCookie.js";
 import {getCookie} from "../utils/cookies/getCookie.js";
-import {setCookie} from "../utils/cookies/setCookie.js";
-import {setEncryptedData} from "../utils/encrypted/setEncryptedData.js";
-import {home, login} from "../constants/routes.js";
+import {login} from "../constants/routes.js";
 import {removeUser} from "../../redux/user/userSlice.js";
 import {useDispatch} from "react-redux";
+import {deleteCollection} from "../utils/deleteCollection.js";
 
 export const RemoveUser = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const handleRemove = () => {
+	const handleRemove = async () => {
 		const auth = getAuth();
 		const user = auth.currentUser;
+		await deleteCollection(["orders", "coupons"]);
+
 
 		deleteUser(user)
 			.then(() => {
@@ -22,7 +23,6 @@ export const RemoveUser = () => {
 				if (isAuthCookie) {
 					deleteCookie("isAuth");
 				}
-
 				deleteCookie("userId");
 				dispatch(removeUser());
 				navigate(login);
